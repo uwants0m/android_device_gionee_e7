@@ -34,6 +34,7 @@ PRODUCT_DEVICE := e7
 PRODUCT_BRAND := gm
 PRODUCT_MODEL := e7
 PRODUCT_MANUFACTURER := gm
+PRODUCT_LOCALES += xxhdpi xhdpi hdpi
 
 # Kernel
 TARGET_KERNEL_SOURCE := kernel/gm/e7
