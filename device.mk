@@ -107,6 +107,20 @@ PRODUCT_PACKAGES += \
     LiveWallpapersPicker \
     librs_jni
 
+# NFC packages
+PRODUCT_PACKAGES += \
+    nfc_nci.bcm2079x.default \
+    libnfc-nci \
+    libnfc_nci_jni \
+    NfcNci \
+    Tag
+ 
+ PRODUCT_COPY_FILES += \
+    frameworks/native/data/etc/android.hardware.nfc.xml:system/etc/permissions/android.hardware.nfc.xml \
+    frameworks/native/data/etc/android.hardware.nfc.hce.xml:system/etc/permissions/android.hardware.nfc.hce.xml \
+    device/gionee/e7/nfc/libnfc-brcm.conf:system/etc/libnfc-brcm.conf \
+    device/gionee/e7/nfc/libnfc-brcm-20791b05.conf:system/etc/libnfc-brcm-20791b05.conf
+    
 # Hardware modules to build
 PRODUCT_PACKAGES += \
 hwcomposer.msm8974 \
