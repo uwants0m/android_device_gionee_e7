@@ -118,8 +118,8 @@ PRODUCT_PACKAGES += \
  PRODUCT_COPY_FILES += \
     frameworks/native/data/etc/android.hardware.nfc.xml:system/etc/permissions/android.hardware.nfc.xml \
     frameworks/native/data/etc/android.hardware.nfc.hce.xml:system/etc/permissions/android.hardware.nfc.hce.xml \
-    device/gionee/e7/nfc/libnfc-brcm.conf:system/etc/libnfc-brcm.conf \
-    device/gionee/e7/nfc/libnfc-brcm-20791b05.conf:system/etc/libnfc-brcm-20791b05.conf
+    device/gionee/e7/libnfc-brcm.conf:system/etc/libnfc-brcm.conf \
+    device/gionee/e7/libnfc-brcm-20791b05.conf:system/etc/libnfc-brcm-20791b05.conf
     
 # Hardware modules to build
 PRODUCT_PACKAGES += \
