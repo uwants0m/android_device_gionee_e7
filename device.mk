@@ -190,7 +190,6 @@ PRODUCT_PROPERTY_OVERRIDES += \
 # Ril
 PRODUCT_PROPERTY_OVERRIDES += \
     rild.libpath=/system/vendor/lib/libril-qc-qmi-1.so \
-    ril.subscription.types=NV,RUIM
 
 # Cell Broadcasts
 PRODUCT_PROPERTY_OVERRIDES += \
