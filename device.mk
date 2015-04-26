@@ -13,11 +13,14 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
-
-# This file includes all definitions that apply to ALL hammerhead devices, and
-# are also specific to hammerhead devices
-#
 # Everything in this directory will become public
+
+# This device is xhdpi.  However the platform doesn't
+# currently contain all of the bitmaps at xhdpi density so
+# we do this little trick to fall back to the hdpi version
+# if the xhdpi doesn't exist.
+PRODUCT_AAPT_CONFIG := normal hdpi xhdpi xxhdpi
+PRODUCT_AAPT_PREF_CONFIG := xxhdpi
 
 # TWRP
 PRODUCT_COPY_FILES += \
@@ -156,12 +159,6 @@ libc2dcolorconvert
 # libOmxEvrcEnc \
 # libOmxQcelp13Enc \
 
-PRODUCT_COPY_FILES += \
-    device/gionee/e7/audio_effects.conf:system/vendor/etc/audio_effects.conf \
-    device/gionee/e7/audio_policy.conf:system/etc/audio_policy.conf \
-    device/gionee/e7/mixer_paths.xml:system/etc/mixer_paths.xml \
-    device/gionee/e7/mixer_paths_auxpcm.xml:system/etc/mixer_paths_auxpcm.xml
-
 # sensors
 PRODUCT_COPY_FILES += \
     device/gionee/e7/sap.conf:system/etc/sap.conf \
@@ -171,6 +168,12 @@ PRODUCT_COPY_FILES += \
 PRODUCT_COPY_FILES += \
     device/gionee/e7/sec_config:system/etc/sec_config
 
+PRODUCT_COPY_FILES += \
+    device/gionee/e7/audio_effects.conf:system/vendor/etc/audio_effects.conf \
+    device/gionee/e7/audio_policy.conf:system/etc/audio_policy.conf \
+    device/gionee/e7/mixer_paths.xml:system/etc/mixer_paths.xml \
+    device/gionee/e7/mixer_paths_auxpcm.xml:system/etc/mixer_paths_auxpcm.xml
+    
 # GPS configuration
 PRODUCT_COPY_FILES += \
     device/gionee/e7/gps.conf:system/etc/gps.conf
