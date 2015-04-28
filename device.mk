@@ -204,7 +204,9 @@ PRODUCT_PROPERTY_OVERRIDES += \
 # Ril
 PRODUCT_PROPERTY_OVERRIDES += \
     rild.libpath=/system/vendor/lib/libril-qc-qmi-1.so \
-
+    rild.libargs=-d /dev/smd0 \
+    ril.subscription.types=NV,RUIM
+    
 # Cell Broadcasts
 PRODUCT_PROPERTY_OVERRIDES += \
     ro.cellbroadcast.emergencyids=0-65534
