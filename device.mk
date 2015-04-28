@@ -90,7 +90,8 @@ PRODUCT_COPY_FILES += \
 # Wifi config
 PRODUCT_COPY_FILES += \
     device/gionee/e7/p2p_supplicant_overlay.conf:system/etc/wifi/p2p_supplicant_overlay.conf \
-    device/gionee/e7/wpa_supplicant_overlay.conf:system/etc/wifi/wpa_supplicant_overlay.conf
+    device/gionee/e7/wpa_supplicant_overlay.conf:system/etc/wifi/wpa_supplicant_overlay.conf \
+    device/gionee/e7/WCNSS_qcom_cfg.ini:system/etc/wifi/WCNSS_qcom_cfg.ini
 
 PRODUCT_TAGS += dalvik.gc.type-precise
 
@@ -107,7 +108,9 @@ PRODUCT_PACKAGES := \
 
 # Live Wallpapers
 PRODUCT_PACKAGES += \
+    LiveWallpapers \
     LiveWallpapersPicker \
+    VisualizationWallpapers \
     librs_jni
 
 # NFC packages
@@ -124,33 +127,33 @@ PRODUCT_PACKAGES += \
     
 # Hardware modules to build
 PRODUCT_PACKAGES += \
-hwcomposer.msm8974 \
-gralloc.msm8974 \
-copybit.msm8974 \
-memtrack.msm8974 \
-audio.primary.msm8974 \
-audio_policy.msm8974 \
-lights.qcom \
-audio.a2dp.default \
-audio.usb.default \
-audio.r_submix.default \
-camera-wrapper.msm8974 \
-libaudio-resampler \
-audiod \
-libqcompostprocbundle \
-libqcomvisualizer \
-libqcomvoiceprocessing \
-power.msm8974 \
-keystore.msm8974
+    hwcomposer.msm8974 \
+    gralloc.msm8974 \
+    copybit.msm8974 \
+    memtrack.msm8974 \
+    audio.primary.msm8974 \
+    audio_policy.msm8974 \
+    lights.qcom \
+    audio.a2dp.default \
+    audio.usb.default \
+    audio.r_submix.default \
+    camera-wrapper.msm8974 \
+    libaudio-resampler \
+    audiod \
+    libqcompostprocbundle \
+    libqcomvisualizer \
+    libqcomvoiceprocessing \
+    power.msm8974 \
+    keystore.msm8974
 
 PRODUCT_PACKAGES += \
-libmm-omxcore \
-libdivxdrmdecrypt \
-libOmxVdec \
-libOmxVenc \
-libOmxCore \
-libstagefrighthw \
-libc2dcolorconvert
+    libmm-omxcore \
+    libdivxdrmdecrypt \
+    libOmxVdec \
+    libOmxVenc \
+    libOmxCore \
+    libstagefrighthw \
+    libc2dcolorconvert
 
 # libOmxAacEnc \
 # libOmxAmrEnc \
@@ -193,11 +196,6 @@ PRODUCT_PROPERTY_OVERRIDES += \
 PRODUCT_PROPERTY_OVERRIDES += \
     ro.opengles.version=196608 \
     persist.hwc.mdpcomp.enable=true
-
-# Do not power down SIM card when modem is sent to Low Power Mode.
-PRODUCT_PROPERTY_OVERRIDES += \
-    persist.radio.apm_sim_not_pwdn=1 \
-    persist.radio.eons.enabled=false
 
 # Ril sends only one RIL_UNSOL_CALL_RING, so set call_ring.multiple to false
 PRODUCT_PROPERTY_OVERRIDES += \
