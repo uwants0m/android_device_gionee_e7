@@ -33,6 +33,7 @@ PRODUCT_NAME := omni_e7
 PRODUCT_DEVICE := e7
 PRODUCT_BRAND := gm
 PRODUCT_MODEL := e7
+PRODUCT_LOCALES += xxhdpi xhdpi hdpi
 PRODUCT_MANUFACTURER := gm
 
 # Kernel
