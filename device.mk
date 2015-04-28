@@ -12,15 +12,6 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-#
-# Everything in this directory will become public
-
-# This device is xhdpi.  However the platform doesn't
-# currently contain all of the bitmaps at xhdpi density so
-# we do this little trick to fall back to the hdpi version
-# if the xhdpi doesn't exist.
-PRODUCT_AAPT_CONFIG := normal hdpi xhdpi xxhdpi
-PRODUCT_AAPT_PREF_CONFIG := xxhdpi
 
 # TWRP
 PRODUCT_COPY_FILES += \
@@ -115,6 +106,7 @@ PRODUCT_PACKAGES += \
 
 # NFC packages
 PRODUCT_PACKAGES += \
+    com.android.nfc_extras \
     nfc_nci.bcm2079x.default \
     NfcNci \
     Tag
@@ -122,6 +114,9 @@ PRODUCT_PACKAGES += \
  PRODUCT_COPY_FILES += \
     frameworks/native/data/etc/android.hardware.nfc.xml:system/etc/permissions/android.hardware.nfc.xml \
     frameworks/native/data/etc/android.hardware.nfc.hce.xml:system/etc/permissions/android.hardware.nfc.hce.xml \
+    frameworks/native/data/etc/com.android.nfc_extras.xml:system/etc/permissions/com.android.nfc_extras.xml \
+    device/gionee/e7/nfcee_access.xml:system/etc/nfcee_access.xml \
+    device/gionee/e7/nfc-nci.conf:system/etc/nfc-nci.conf \
     device/gionee/e7/libnfc-brcm.conf:system/etc/libnfc-brcm.conf \
     device/gionee/e7/libnfc-brcm-20791b05.conf:system/etc/libnfc-brcm-20791b05.conf
     
