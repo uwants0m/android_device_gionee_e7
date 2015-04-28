@@ -113,8 +113,6 @@ PRODUCT_PACKAGES += \
 # NFC packages
 PRODUCT_PACKAGES += \
     nfc_nci.bcm2079x.default \
-    libnfc-nci \
-    libnfc_nci_jni \
     NfcNci \
     Tag
  
