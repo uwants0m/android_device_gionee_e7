@@ -128,7 +128,7 @@ PRODUCT_PACKAGES += \
     memtrack.msm8974 \
     audio.primary.msm8974 \
     audio_policy.msm8974 \
-    lights.msm8974 \
+    lights.e7 \
     audio.a2dp.default \
     audio.usb.default \
     audio.r_submix.default \
@@ -199,6 +199,12 @@ PRODUCT_PROPERTY_OVERRIDES += \
 # Ril
 PRODUCT_PROPERTY_OVERRIDES += \
     rild.libpath=/system/vendor/lib/libril-qc-qmi-1.so \
+    rild.libargs=-d /dev/smd0 \
+    telephony.lteOnGSMDevice=1 \
+    ro.nfc.port=I2C \
+    persist.radio.add_power_save=1 \
+    ro.qualcomm.cabl=1 \
+    hw.cabl.level=Auto \
     ril.subscription.types=NV,RUIM
 
 # Do not power down SIM card when modem is sent to Low Power Mode.
