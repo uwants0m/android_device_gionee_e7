@@ -108,6 +108,30 @@ TARGET_RELEASETOOLS_EXTENSIONS := device/gionee/e7
 # Include an expanded selection of fonts
 EXTENDED_FONT_FOOTPRINT := true
 
+# selinux
+include device/qcom/sepolicy/sepolicy.mk
+
+BOARD_SEPOLICY_DIRS += \
+    device/gionee/e7/sepolicy
+
+BOARD_SEPOLICY_UNION += \
+    device.te \
+    file_contexts \
+    file.te \
+    init_shell.te \
+    mediaserver.te \
+    mm-qcamerad.te \
+    qseecomd.te \
+    rmt_storage.te \
+    sensors.te \
+    system_app.te \
+    system_server.te \
+    time_daemon.te \
+    thermal-engine.te \
+    vold.te \
+    property_contexts \
+    property.te
+    
 #TWRP
 TW_THEME := portrait_hdpi
 TARGET_USERIMAGES_USE_EXT4 := true
