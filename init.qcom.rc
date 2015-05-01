@@ -34,8 +34,8 @@ on init
     # Set permissions for persist partition
     mkdir /persist 0771 system system
 
-    mkdir /mnt/media_rw/sdcard0 0775 media_rw media_rw
-    mkdir /mnt/media_rw/sdcard1 0775 media_rw media_rw
+    mkdir /mnt/media_rw/sdcard0 0700 media_rw media_rw
+    mkdir /mnt/media_rw/sdcard1 0700 media_rw media_rw
     mkdir /mnt/media_rw/usbdisk 0700 media_rw media_rw
 
     mkdir /storage/sdcard0 0700 root root
@@ -210,13 +210,6 @@ on post-fs-data
     mkdir /data/misc/location 0770 gps gps
     mkdir /data/misc/location/mq 0770 gps gps
     mkdir /data/misc/location/xtwifi 0770 gps gps
-
-    # Sensors
-    mkdir /data/system 0775 system system
-    mkdir /data/system/sensors 0775 system system
-    mkdir /data/misc/sensors 0775 system system
-    write /data/system/sensors/settings 1
-    chmod 664 /data/system/sensors/settings
     
     #Create directory from IMS services
     mkdir /data/shared 0755
@@ -231,9 +224,6 @@ on post-fs-data
 
     # Create /data/time folder for time-services
     mkdir /data/time/ 0700 system system
-
-    mkdir /data/etc 0775
-    mkdir /data/system 0775 system system
     
     mkdir /data/audio/ 0770 media audio
     # Enable the setgid bit on the directory
