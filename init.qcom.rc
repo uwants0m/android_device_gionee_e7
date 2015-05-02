@@ -385,10 +385,11 @@ service netmgrd /system/bin/netmgrd
     disabled
 
 service sensors /system/bin/sensors.qcom
-    class main
+    class core
     user root
     group root
- 
+    disabled
+    
 service qcom-sensor-sh /system/bin/sh /init.qcom.sensor.sh
     class core
     user root
