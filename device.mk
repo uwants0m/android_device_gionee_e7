@@ -29,8 +29,6 @@ device/gionee/e7/init.qcom.sh:root/init.qcom.sh \
 device/gionee/e7/init.qcom.ssr.sh:root/init.qcom.ssr.sh \
 device/gionee/e7/init.qcom.syspart_fixup.sh:root/init.qcom.syspart_fixup.sh \
 device/gionee/e7/init.qcom.usb.sh:root/init.qcom.usb.sh \
-device/gionee/e7/init.mdm.sh:root/init.mdm.sh \
-device/gionee/e7/init.qcom.ril.sh:root/init.qcom.ril.sh \
 device/gionee/e7/init.qcom.usb.rc:root/init.qcom.usb.rc \
 device/gionee/e7/fstab.qcom:root/fstab.qcom \
 device/gionee/e7/ueventd.qcom.rc:root/ueventd.qcom.rc
