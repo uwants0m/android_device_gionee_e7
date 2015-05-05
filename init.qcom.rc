@@ -46,6 +46,7 @@ on init
 
     export EXTERNAL_STORAGE /storage/sdcard0
     export SECONDARY_STORAGE /storage/sdcard1:/storage/usbdisk
+    export LD_LIBRARY_PATH /vendor/lib:/system/lib
 
     # Support legacy paths
     symlink /storage/sdcard0 /sdcard
