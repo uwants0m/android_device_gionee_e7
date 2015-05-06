@@ -161,6 +161,42 @@ on boot
     # Set the default message loglevel to KERN_INFO
     write /proc/sys/kernel/printk "6 6 1 7"
 
+    #gionee zhoucs add lcd cabc 20140731 begin
+    chmod 0666 /sys/class/leds/lcd-cabc/brightness
+    #gionee zhoucs add lcd cabc 20140731 end
+
+#Gionee zhouli add for nfc, 20130808
+#Permissions for nfc
+    chmod 0777 /dev/bcm2079x 
+
+#Gionee enable ssr
+    write /sys/bus/msm_subsys/devices/subsys0/restart_level related
+    write /sys/bus/msm_subsys/devices/subsys1/restart_level related
+    write /sys/bus/msm_subsys/devices/subsys2/restart_level related
+    write /sys/bus/msm_subsys/devices/subsys3/restart_level related
+
+#gionee add for dump switch 
+    chmod 0666 /sys/module/restart/parameters/download_mode
+    
+# Gionee wanglei, 2013-10-21, add for torch led
+    chmod 0666 /sys/class/leds/led:flash_torch/brightness
+
+#Gionee xuna add for autommitest, 20140724
+    chmod 0777 /sys/class/leds/button-backlight/brightness
+# Define TCP buffer sizes for various networks
+# ReadMin, ReadInitial, ReadMax, WriteMin, WriteInitial, WriteMax,
+    setprop net.tcp.buffersize.default 4096,87380,110208,4096,16384,110208
+    setprop net.tcp.buffersize.wifi    524288,1048576,2097152,262144,524288,1048576
+    setprop net.tcp.buffersize.lte     524288,1048576,2097152,262144,524288,1048576
+    setprop net.tcp.buffersize.umts    4094,87380,110208,4096,16384,110208
+    setprop net.tcp.buffersize.hspa    4094,87380,262144,4096,16384,262144
+    setprop net.tcp.buffersize.hsupa   4094,87380,262144,4096,16384,262144
+    setprop net.tcp.buffersize.hsdpa   4094,87380,262144,4096,16384,262144
+    setprop net.tcp.buffersize.hspap   4094,87380,1220608,4096,16384,1220608
+    setprop net.tcp.buffersize.edge    4093,26280,35040,4096,16384,35040
+    setprop net.tcp.buffersize.gprs    4092,8760,11680,4096,8760,11680
+    setprop net.tcp.buffersize.evdo    4094,87380,262144,4096,16384,262144
+    
 # msm specific files that need to be created on /data
 on post-fs-data
     # NFC local data and nfcee xml storage
