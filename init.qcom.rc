@@ -205,7 +205,8 @@ on post-fs-data
     
     # we will remap this as /mnt/sdcard with the sdcard fuse tool
     mkdir /data/media 0775 media_rw media_rw
-
+    chown media_rw media_rw /data/media
+    
     # Create the directories used by the Wireless subsystem
     mkdir /data/misc/wifi 0770 wifi wifi
     mkdir /data/misc/wifi/sockets 0770 wifi wifi
@@ -226,6 +227,7 @@ on post-fs-data
     # Mounting of persist is moved to 'on emmc-fs' and 'on fs' sections
     # We chown/chmod /persist again so because mount is run as root + defaults
     chown system system /persist
+    chmod 0771 /persist
     
     chmod 0664 /sys/devices/platform/msm_sdcc.1/polling
     chmod 0664 /sys/devices/platform/msm_sdcc.2/polling
@@ -238,11 +240,16 @@ on post-fs-data
     chown system system /sys/devices/platform/msm_sdcc.3/polling
     chown system system /sys/devices/platform/msm_sdcc.4/polling
 
+    mkdir /data/etc 0775
+    mkdir /data/system 0775 system system
+    
     #Create directory used by sensor subsystem(dsps)
     mkdir /data/system/sensors
     chmod 775 /data/system/sensors
     write /data/system/sensors/settings 1
     chmod 664 /data/system/sensors/settings
+
+    chown system /dev/block/platform/msm_sdcc.1/by-name
 
     # AKM setting data
     mkdir /data/misc/sensors
@@ -283,6 +290,8 @@ on post-fs-data
     mkdir /data/audio/ 0770 media audio
     # Enable the setgid bit on the directory
     chmod 2770 /data/audio
+
+    mkdir /data/data/media 0770 media media
 
     # Tombstone dropboxes
     mkdir /data/tombstones 0771 system system
