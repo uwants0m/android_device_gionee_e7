@@ -116,12 +116,12 @@ TARGET_PROVIDES_POWERHAL := true
 SENSORS_NEED_SETRATE_ON_ENABLE := true
 
 # selinux
-include device/qcom/sepolicy/sepolicy.mk
+#include device/qcom/sepolicy/sepolicy.mk
 
-BOARD_SEPOLICY_DIRS += \
-    device/gionee/e7/sepolicy
+#BOARD_SEPOLICY_DIRS += \
+ #   device/gionee/e7/sepolicy
 
-BOARD_SEPOLICY_UNION += \
+#BOARD_SEPOLICY_UNION += \
     device.te \
     file_contexts \
     file.te \
