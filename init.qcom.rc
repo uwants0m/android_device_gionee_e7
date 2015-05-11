@@ -52,19 +52,13 @@ on init
     symlink /storage/sdcard0 /sdcard
     symlink /storage/sdcard0 /mnt/sdcard
 
+    # bluetooth
+    mkdir /data/misc/bluetooth 0770 bluetooth bluetooth
+
+on fs
     mount_all ./fstab.qcom
 
     setprop ro.crypto.fuse_sdcard true
-    
-    # bluetooth
-    mkdir /data/misc/bluetooth 0770 bluetooth bluetooth
-    
-on early-boot
-    # set RLIMIT_MEMLOCK to 64MB
-    setrlimit 8 67108864 67108864
-    # Allow subsystem (modem etc) debugging
-    exec /system/bin/sh /init.qcom.early_boot.sh ${ro.board.platform}
-    exec /system/bin/sh /init.qcom.syspart_fixup.sh ${ro.board.platform} ${ro.serialno}
 
     wait /dev/block/platform/msm_sdcc.1/by-name/cache
     mount ext4 /dev/block/platform/msm_sdcc.1/by-name/cache /cache nosuid nodev barrier=1
@@ -75,6 +69,13 @@ on early-boot
     
     wait /dev/block/platform/msm_sdcc.1/by-name/modem
     mount vfat /dev/block/platform/msm_sdcc.1/by-name/modem /firmware ro shortname=lower,uid=1000,gid=1000,dmask=227,fmask=337
+    
+on early-boot
+    # set RLIMIT_MEMLOCK to 64MB
+    setrlimit 8 67108864 67108864
+    # Allow subsystem (modem etc) debugging
+    exec /system/bin/sh /init.qcom.early_boot.sh ${ro.board.platform}
+    exec /system/bin/sh /init.qcom.syspart_fixup.sh ${ro.board.platform} ${ro.serialno}
     
 on boot
     chown bluetooth bluetooth /sys/module/bluetooth_power/parameters/power
@@ -165,26 +166,27 @@ on boot
     chmod 0666 /sys/class/leds/lcd-cabc/brightness
     #gionee zhoucs add lcd cabc 20140731 end
 
-#Gionee zhouli add for nfc, 20130808
-#Permissions for nfc
+    #Gionee zhouli add for nfc, 20130808
+    #Permissions for nfc
     chmod 0777 /dev/bcm2079x 
 
-#Gionee enable ssr
+    #Gionee enable ssr
     write /sys/bus/msm_subsys/devices/subsys0/restart_level related
     write /sys/bus/msm_subsys/devices/subsys1/restart_level related
     write /sys/bus/msm_subsys/devices/subsys2/restart_level related
     write /sys/bus/msm_subsys/devices/subsys3/restart_level related
 
-#gionee add for dump switch 
+    #gionee add for dump switch 
     chmod 0666 /sys/module/restart/parameters/download_mode
     
-# Gionee wanglei, 2013-10-21, add for torch led
+    # Gionee wanglei, 2013-10-21, add for torch led
     chmod 0666 /sys/class/leds/led:flash_torch/brightness
 
-#Gionee xuna add for autommitest, 20140724
+    #Gionee xuna add for autommitest, 20140724
     chmod 0777 /sys/class/leds/button-backlight/brightness
-# Define TCP buffer sizes for various networks
-# ReadMin, ReadInitial, ReadMax, WriteMin, WriteInitial, WriteMax,
+
+    # Define TCP buffer sizes for various networks
+    # ReadMin, ReadInitial, ReadMax, WriteMin, WriteInitial, WriteMax,
     setprop net.tcp.buffersize.default 4096,87380,110208,4096,16384,110208
     setprop net.tcp.buffersize.wifi    524288,1048576,2097152,262144,524288,1048576
     setprop net.tcp.buffersize.lte     524288,1048576,2097152,262144,524288,1048576
@@ -202,10 +204,6 @@ on post-fs-data
     # NFC local data and nfcee xml storage
     mkdir /data/nfc 0770 nfc nfc
     mkdir /data/nfc/param 0770 nfc nfc
-    
-    # we will remap this as /mnt/sdcard with the sdcard fuse tool
-    mkdir /data/media 0775 media_rw media_rw
-    chown media_rw media_rw /data/media
     
     # Create the directories used by the Wireless subsystem
     mkdir /data/misc/wifi 0770 wifi wifi
@@ -240,7 +238,6 @@ on post-fs-data
     chown system system /sys/devices/platform/msm_sdcc.3/polling
     chown system system /sys/devices/platform/msm_sdcc.4/polling
 
-    mkdir /data/etc 0775
     mkdir /data/system 0775 system system
     
     #Create directory used by sensor subsystem(dsps)
@@ -277,10 +274,6 @@ on post-fs-data
     mkdir /data/shared 0755
     chown system system /data/shared
 
-    #Create directory for FOTA
-    mkdir /data/fota 0771
-    chown system system /data/fota
-
     #Create directory for hostapd
     mkdir /data/hostapd 0770 system wifi
 
@@ -291,8 +284,6 @@ on post-fs-data
     # Enable the setgid bit on the directory
     chmod 2770 /data/audio
 
-    mkdir /data/data/media 0770 media media
-
     # Tombstone dropboxes
     mkdir /data/tombstones 0771 system system
     mkdir /data/tombstones/modem 0771 system system
@@ -301,9 +292,6 @@ on post-fs-data
     mkdir /data/tombstones/dsps 0771 system system
     
     setprop vold.post_fs_data_done 1
-
-    #Create a folder for SRS to be able to create a usercfg file
-    mkdir /data/data/media 0770 media media
 
 # Export GPIO56 for fusion targets to enable/disable hub
 service usbhub_init /system/bin/usbhub_init
@@ -321,6 +309,9 @@ on property:ro.board.platform=msm7630_fusion
 
 on property:init.svc.wpa_supplicant=stopped
     stop dhcpcd
+
+on property:vold.decrypt=trigger_restart_framework
+setprop ro.fuse_sdcard ${persist.fuse_sdcard}
 
 on property:bluetooth.isEnabled=true
     start btwlancoex
@@ -625,14 +616,6 @@ service fm_dl /system/bin/sh /system/etc/init.qcom.fm.sh
     disabled
     oneshot
 
-on property:crypto.driver.load=1
-     insmod /system/lib/modules/qce.ko
-     insmod /system/lib/modules/qcedev.ko
-
-on property:crypto.driver.load=0
-     exec /system/bin/rmmod qcedev.ko
-     exec /system/bin/rmmod qce.ko
-
 service drmdiag /system/bin/drmdiagapp
     class late_start
      user root
@@ -650,11 +633,11 @@ service qcom-sh /system/bin/sh /init.qcom.sh
     user root
     oneshot
 
-service qcom-post-boot /system/bin/sh /system/etc/init.qcom.post_boot.sh
-    class late_start
-    user root
-    disabled
-    oneshot
+#service qcom-post-boot /system/bin/sh /system/etc/init.qcom.post_boot.sh
+#    class late_start
+#    user root
+#    disabled
+#    oneshot
 
 service wifi-sdio-on /system/bin/sh /system/etc/init.qcom.sdio.sh
     class late_start
@@ -669,8 +652,8 @@ service wifi-crda /system/bin/sh /system/etc/init.crda.sh
    oneshot
 
 
-on property:sys.boot_completed=1
-    start qcom-post-boot
+#on property:sys.boot_completed=1
+#    start qcom-post-boot
 
 service atfwd /system/bin/ATFWD-daemon
     class late_start
@@ -749,6 +732,16 @@ service fuse_sdcard1 /system/bin/sdcard -u 1023 -g 1023 -t 4 /mnt/media_rw/sdcar
 service fuse_usbdisk /system/bin/sdcard -u 1023 -g 1023 /mnt/media_rw/usbdisk /storage/usbdisk
     class late_start
     disabled
+
+on property:ro.fuse_sdcard=true
+    start sdcard
+
+# This will make sure that sdcard service starts as late_start.
+on nonencrypted
+    setprop ro.fuse_sdcard ${persist.fuse_sdcard}
+
+on property:vold.decrypt=trigger_restart_framework
+    setprop ro.fuse_sdcard ${persist.fuse_sdcard}
 
 service hcidump /system/bin/sh /system/etc/hcidump.sh
     user bluetooth
