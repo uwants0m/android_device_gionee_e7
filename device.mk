@@ -80,7 +80,6 @@ PRODUCT_COPY_FILES += \
 PRODUCT_COPY_FILES += \
     device/gionee/e7/p2p_supplicant_overlay.conf:system/etc/wifi/p2p_supplicant_overlay.conf \
     device/gionee/e7/wpa_supplicant_overlay.conf:system/etc/wifi/wpa_supplicant_overlay.conf \
-    device/gionee/e7/WCNSS_qcom_cfg.ini:system/etc/wifi/WCNSS_qcom_cfg.ini
 
 PRODUCT_TAGS += dalvik.gc.type-precise
 
@@ -240,7 +239,7 @@ PRODUCT_PROPERTY_OVERRIDES += \
 
 # Audio Configuration
 PRODUCT_PROPERTY_OVERRIDES += \
-    ro.qc.sdk.audio.fluencetype=fluence \
+    ro.qc.sdk.audio.audience=true \
     persist.audio.fluence.voicecall=true \
     af.resampler.quality=4 \
     audio.offload.buffer.size.kb=32 \
@@ -267,8 +266,6 @@ PRODUCT_PROPERTY_OVERRIDES += \
 PRODUCT_PROPERTY_OVERRIDES += \
     ro.build.selinux=1 \
     ro.sf.lcd_density=480
-
-PRODUCT_TAGS += dalvik.gc.type-precise
 
 $(call inherit-product, frameworks/native/build/phone-xxhdpi-2048-dalvik-heap.mk)
 $(call inherit-product, frameworks/native/build/phone-xxhdpi-2048-hwui-memory.mk)
