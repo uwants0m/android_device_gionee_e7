@@ -198,6 +198,11 @@ on boot
     setprop net.tcp.buffersize.edge    4093,26280,35040,4096,16384,35040
     setprop net.tcp.buffersize.gprs    4092,8760,11680,4096,8760,11680
     setprop net.tcp.buffersize.evdo    4094,87380,262144,4096,16384,262144
+   
+    start sensors
+   
+    # Update WIFI MAC address
+    start mac-update
     
 # msm specific files that need to be created on /data
 on post-fs-data
@@ -212,6 +217,11 @@ on post-fs-data
     mkdir /data/misc/dhcp 0770 dhcp dhcp
     chown dhcp dhcp /data/misc/dhcp
 
+    mkdir /data/misc/wifi/prima 0775 wifi wifi
+
+    write /dev/wcnss_wlan 1
+    write /sys/module/wcnss_ssr_8960/parameters/enable_riva_ssr 1
+    
     # Create the directories used by CnE subsystem
     mkdir /data/connectivity 0771 system system
     chown system system /data/connectivity
@@ -352,6 +362,12 @@ service rmt_storage /system/bin/rmt_storage
 on property:ro.boot.emmc=true
     start rmt_storage
 
+# Update WIFI MAC address
+service mac-update /system/bin/logwrapper /system/bin/mac-update
+    class main
+    user root
+    oneshot
+    
 service config_bluetooth /system/bin/sh /system/etc/init.qcom.bt.sh "onboot"
     class core
     user root
@@ -447,15 +463,10 @@ service netmgrd /system/bin/netmgrd
     disabled
 
 service sensors /system/bin/sensors.qcom
-    class core
+    class late_start
     user root
     group root
     disabled
-    
-service qcom-sensor-sh /system/bin/sh /init.qcom.sensor.sh
-    class core
-    user root
-    oneshot
 
 on property:ro.use_data_netmgrd=false
     # netmgr not supported on specific target
@@ -491,6 +502,11 @@ service amp_unload /system/bin/amploader -u
     disabled
     oneshot
 
+service qseecomd /system/bin/qseecomd
+    class core
+    user root
+    group root
+    
 service wcnss-service /system/bin/wcnss_service
    class late_start
    user root
@@ -527,43 +543,27 @@ service wpa_supplicant /system/bin/wpa_supplicant \
     disabled
     oneshot
 
-service dhcpcd_wlan0 /system/bin/dhcpcd -ABKLG
-    class late_start
+service dhcpcd_wlan0 /system/bin/dhcpcd -aABDKL
+    class main
     disabled
     oneshot
 
-service dhcpcd_p2p /system/bin/dhcpcd -ABKLG
-    class late_start
+service dhcpcd_p2p /system/bin/dhcpcd -aABKL
+    class main
     disabled
     oneshot
 
 service iprenew_wlan0 /system/bin/dhcpcd -n
-    class late_start
+    class main
     disabled
     oneshot
 
 service iprenew_p2p /system/bin/dhcpcd -n
-    class late_start
+    class main
     disabled
     oneshot
 
 service dhcpcd_bnep0 /system/bin/dhcpcd -BKLG
-    disabled
-    oneshot
-
-service dhcpcd_bnep1 /system/bin/dhcpcd -BKLG
-    disabled
-    oneshot
-
-service dhcpcd_bnep2 /system/bin/dhcpcd -BKLG
-    disabled
-    oneshot
-
-service dhcpcd_bnep3 /system/bin/dhcpcd -BKLG
-    disabled
-    oneshot
-
-service dhcpcd_bnep4 /system/bin/dhcpcd -BKLG
     disabled
     oneshot
 
@@ -756,24 +756,6 @@ service ssr_diag /system/bin/ssr_diag
     class late_start
     user system
     group system
-
-# Disable SSR to SoC restart
-on property:persist.sys.ssr.restart_level=1
-    write /sys/module/subsystem_restart/parameters/restart_level 1
-    write /sys/module/wcnss_ssr_8960/parameters/enable_riva_ssr 0
-    write /sys/bus/msm_subsys/devices/subsys0/restart_level system
-    write /sys/bus/msm_subsys/devices/subsys1/restart_level system
-    write /sys/bus/msm_subsys/devices/subsys2/restart_level system
-    write /sys/bus/msm_subsys/devices/subsys3/restart_level system
-
-# Enable SSR
-on property:persist.sys.ssr.restart_level=3
-    write /sys/module/subsystem_restart/parameters/restart_level 3
-    write /sys/module/wcnss_ssr_8960/parameters/enable_riva_ssr 1
-    write /sys/bus/msm_subsys/devices/subsys0/restart_level related
-    write /sys/bus/msm_subsys/devices/subsys1/restart_level related
-    write /sys/bus/msm_subsys/devices/subsys2/restart_level related
-    write /sys/bus/msm_subsys/devices/subsys3/restart_level related
 
 # Define fastmmi
 service fastmmi /system/bin/mmi
