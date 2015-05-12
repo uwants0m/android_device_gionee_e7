@@ -44,8 +44,7 @@ PRODUCT_COPY_FILES += \
 PRODUCT_COPY_FILES += \
     device/gionee/e7/gpio-keys.kl:system/usr/keylayout/gpio-keys.kl \
     device/gionee/e7/atmel_mxt_ts.kl:system/usr/keylayout/atmel_mxt_ts.kl \
-    device/gionee/e7/qpnp_pon.kl:system/usr/keylayout/qpnp_pon.kl \
-    device/gionee/e7/qpnp_pon.kcm:system/usr/keychars/qpnp_pon.kcm
+    device/gionee/e7/synaptics_rmi4_i2c.kl:system/usr/keylayout/synaptics_rmi4_i2c.kl \
 
 # These are the hardware-specific features
 PRODUCT_COPY_FILES += \
@@ -87,6 +86,7 @@ DEVICE_PACKAGE_OVERLAYS := \
     device/gionee/e7/overlay
 
 PRODUCT_PACKAGES := \
+    mac-update \
     libwpa_client \
     hostapd \
     dhcpcd.conf \
