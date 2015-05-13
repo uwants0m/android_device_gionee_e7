@@ -78,6 +78,10 @@ on early-boot
     exec /system/bin/sh /init.qcom.syspart_fixup.sh ${ro.board.platform} ${ro.serialno}
     
 on boot
+    #Nv dump stuff - probably needed for BT MAC address.
+    #hci_qcomm_init does want to look here
+    mkdir /data/opponvitems  0771 radio radio
+    
     chown bluetooth bluetooth /sys/module/bluetooth_power/parameters/power
     chown bluetooth bluetooth /sys/class/rfkill/rfkill0/type
     chown bluetooth bluetooth /sys/class/rfkill/rfkill0/state
@@ -215,7 +219,8 @@ on post-fs-data
     mkdir /data/misc/wifi/sockets 0770 wifi wifi
     mkdir /data/misc/wifi/wpa_supplicant 0770 wifi wifi
     mkdir /data/misc/dhcp 0770 dhcp dhcp
-    chown dhcp dhcp /data/misc/dhcp
+    # to observe dnsmasq.leases file for dhcp information of soft ap.
+    chown dhcp system /data/misc/dhcp
 
     mkdir /data/misc/wifi/prima 0775 wifi wifi
 
