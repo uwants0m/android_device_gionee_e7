@@ -290,6 +290,8 @@ on post-fs-data
     # Create /data/time folder for time-services
     mkdir /data/time/ 0700 system system
     
+    setprop qcom.audio.init complete
+    
     mkdir /data/audio/ 0770 media audio
     # Enable the setgid bit on the directory
     chmod 2770 /data/audio
@@ -458,9 +460,13 @@ service qmuxd /system/bin/qmuxd
     group radio audio bluetooth gps qcom_diag
     disabled
 
+service audiod /system/bin/audiod
+    class main
+    user system
+    group audio
+    
 service netmgrd /system/bin/netmgrd
     class main
-    disabled
 
 service sensors /system/bin/sensors.qcom
     class late_start
@@ -639,17 +645,17 @@ service qcom-sh /system/bin/sh /init.qcom.sh
 #    disabled
 #    oneshot
 
-service wifi-sdio-on /system/bin/sh /system/etc/init.qcom.sdio.sh
-    class late_start
-    group wifi inet
-    disabled
-    oneshot
+#service wifi-sdio-on /system/bin/sh /system/etc/init.qcom.sdio.sh
+#    class late_start
+#    group wifi inet
+#    disabled
+#    oneshot
 
-service wifi-crda /system/bin/sh /system/etc/init.crda.sh
-   class late_start
-   user root
-   disabled
-   oneshot
+#service wifi-crda /system/bin/sh /system/etc/init.crda.sh
+#   class late_start
+#   user root
+#   disabled
+#   oneshot
 
 
 #on property:sys.boot_completed=1
