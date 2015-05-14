@@ -502,8 +502,7 @@ case "$target" in
       ;;
 esac
 
-# Run audio init script
 #Gionee 20131202 huangrh add for cta test begin
 chmod 0777 /dev/smd3
 #Gionee 20131202 huangrh add for cta test end
-/system/bin/sh /system/etc/init.qcom.audio.sh "$target" "$btsoc"
+/system/bin/sh /system/etc/hsic.control.bt.sh
