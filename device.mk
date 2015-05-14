@@ -33,6 +33,12 @@ device/gionee/e7/init.qcom.usb.rc:root/init.qcom.usb.rc \
 device/gionee/e7/fstab.qcom:root/fstab.qcom \
 device/gionee/e7/ueventd.qcom.rc:root/ueventd.qcom.rc
 
+# system/etc files
+device/gionee/e7/hsic.control.bt.sh:system/etc/hsic.control.bt.sh \
+device/gionee/e7/init.qcom.bt.sh:system/etc/init.qcom.bt.sh \
+device/gionee/e7/init.qcom.modem_links.sh:system/etc/init.qcom.modem_links.sh \
+device/gionee/e7/init.qcom.wifi.sh:system/etc/init.qcom.wifi.sh \
+
 PRODUCT_COPY_FILES += \
     frameworks/av/media/libstagefright/data/media_codecs_google_audio.xml:system/etc/media_codecs_google_audio.xml \
     frameworks/av/media/libstagefright/data/media_codecs_google_telephony.xml:system/etc/media_codecs_google_telephony.xml \
