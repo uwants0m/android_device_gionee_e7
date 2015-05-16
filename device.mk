@@ -142,7 +142,6 @@ PRODUCT_PACKAGES += \
     libqcompostprocbundle \
     libqcomvisualizer \
     libqcomvoiceprocessing \
-    power.msm8974 \
     keystore.msm8974
 
 PRODUCT_PACKAGES += \
