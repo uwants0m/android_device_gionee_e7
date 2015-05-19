@@ -112,9 +112,6 @@ EXTENDED_FONT_FOOTPRINT := true
 # power hal
 TARGET_PROVIDES_POWERHAL := true
 
-# Compatibility with pre-kitkat Qualcomm sensor HALs
-SENSORS_NEED_SETRATE_ON_ENABLE := true
-
 # selinux
 #include device/qcom/sepolicy/sepolicy.mk
 
