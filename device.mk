@@ -15,29 +15,29 @@
 
 # TWRP
 PRODUCT_COPY_FILES += \
-device/gionee/e7/init.qcom.usb.rc:recovery/root/init.usb.rc \
-device/gionee/e7/twrp.fstab:recovery/root/etc/twrp.fstab 
+    device/gionee/e7/init.qcom.usb.rc:recovery/root/init.usb.rc \
+    device/gionee/e7/twrp.fstab:recovery/root/etc/twrp.fstab 
 
 # E7 Init files
 PRODUCT_COPY_FILES += \
-device/gionee/e7/init.qcom.rc:root/init.qcom.rc \
-device/gionee/e7/init.qcom.class_core.sh:root/init.qcom.class_core.sh \
-device/gionee/e7/init.qcom.class_main.sh:root/init.qcom.class_main.sh \
-device/gionee/e7/init.qcom.early_boot.sh:root/init.qcom.early_boot.sh \
-device/gionee/e7/init.qcom.factory.sh:root/init.qcom.factory.sh \
-device/gionee/e7/init.qcom.sh:root/init.qcom.sh \
-device/gionee/e7/init.qcom.ssr.sh:root/init.qcom.ssr.sh \
-device/gionee/e7/init.qcom.syspart_fixup.sh:root/init.qcom.syspart_fixup.sh \
-device/gionee/e7/init.qcom.usb.sh:root/init.qcom.usb.sh \
-device/gionee/e7/init.qcom.usb.rc:root/init.qcom.usb.rc \
-device/gionee/e7/fstab.qcom:root/fstab.qcom \
-device/gionee/e7/ueventd.qcom.rc:root/ueventd.qcom.rc
+    device/gionee/e7/init.qcom.rc:root/init.qcom.rc \
+    device/gionee/e7/init.qcom.class_core.sh:root/init.qcom.class_core.sh \
+    device/gionee/e7/init.qcom.class_main.sh:root/init.qcom.class_main.sh \
+    device/gionee/e7/init.qcom.early_boot.sh:root/init.qcom.early_boot.sh \
+    device/gionee/e7/init.qcom.factory.sh:root/init.qcom.factory.sh \
+    device/gionee/e7/init.qcom.sh:root/init.qcom.sh \
+    device/gionee/e7/init.qcom.ssr.sh:root/init.qcom.ssr.sh \
+    device/gionee/e7/init.qcom.syspart_fixup.sh:root/init.qcom.syspart_fixup.sh \
+    device/gionee/e7/init.qcom.usb.sh:root/init.qcom.usb.sh \
+    device/gionee/e7/init.qcom.usb.rc:root/init.qcom.usb.rc \
+    device/gionee/e7/fstab.qcom:root/fstab.qcom \
+    device/gionee/e7/ueventd.qcom.rc:root/ueventd.qcom.rc
 
 # system/etc files
 PRODUCT_COPY_FILES += \
-device/gionee/e7/hsic.control.bt.sh:system/etc/hsic.control.bt.sh \
-device/gionee/e7/init.qcom.bt.sh:system/etc/init.qcom.bt.sh \
-device/gionee/e7/init.qcom.modem_links.sh:system/etc/init.qcom.modem_links.sh
+    device/gionee/e7/hsic.control.bt.sh:system/etc/hsic.control.bt.sh \
+    device/gionee/e7/init.qcom.bt.sh:system/etc/init.qcom.bt.sh \
+    device/gionee/e7/init.qcom.modem_links.sh:system/etc/init.qcom.modem_links.sh
 
 PRODUCT_COPY_FILES += \
     frameworks/av/media/libstagefright/data/media_codecs_google_audio.xml:system/etc/media_codecs_google_audio.xml \
@@ -50,7 +50,7 @@ PRODUCT_COPY_FILES += \
 PRODUCT_COPY_FILES += \
     device/gionee/e7/gpio-keys.kl:system/usr/keylayout/gpio-keys.kl \
     device/gionee/e7/atmel_mxt_ts.kl:system/usr/keylayout/atmel_mxt_ts.kl \
-    device/gionee/e7/synaptics_rmi4_i2c.kl:system/usr/keylayout/synaptics_rmi4_i2c.kl \
+    device/gionee/e7/synaptics_rmi4_i2c.kl:system/usr/keylayout/synaptics_rmi4_i2c.kl
 
 # These are the hardware-specific features
 PRODUCT_COPY_FILES += \
@@ -109,15 +109,12 @@ PRODUCT_PACKAGES += \
 
 # NFC packages
 PRODUCT_PACKAGES += \
-    com.android.nfc_extras \
     nfc_nci.bcm2079x.default \
     NfcNci \
     Tag
  
  PRODUCT_COPY_FILES += \
     frameworks/native/data/etc/android.hardware.nfc.xml:system/etc/permissions/android.hardware.nfc.xml \
-    frameworks/native/data/etc/android.hardware.nfc.hce.xml:system/etc/permissions/android.hardware.nfc.hce.xml \
-    frameworks/native/data/etc/com.android.nfc_extras.xml:system/etc/permissions/com.android.nfc_extras.xml \
     device/gionee/e7/nfcee_access.xml:system/etc/nfcee_access.xml \
     device/gionee/e7/nfc-nci.conf:system/etc/nfc-nci.conf \
     device/gionee/e7/libnfc-brcm.conf:system/etc/libnfc-brcm.conf \
