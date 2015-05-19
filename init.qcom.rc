@@ -204,9 +204,6 @@ on boot
     setprop net.tcp.buffersize.evdo    4094,87380,262144,4096,16384,262144
    
     start sensors
-   
-    # Update WIFI MAC address
-    start mac-update
     
 # msm specific files that need to be created on /data
 on post-fs-data
@@ -221,11 +218,6 @@ on post-fs-data
     mkdir /data/misc/dhcp 0770 dhcp dhcp
     # to observe dnsmasq.leases file for dhcp information of soft ap.
     chown dhcp system /data/misc/dhcp
-
-    mkdir /data/misc/wifi/prima 0775 wifi wifi
-
-    write /dev/wcnss_wlan 1
-    write /sys/module/wcnss_ssr_8960/parameters/enable_riva_ssr 1
     
     # Create the directories used by CnE subsystem
     mkdir /data/connectivity 0771 system system
@@ -368,12 +360,6 @@ service rmt_storage /system/bin/rmt_storage
 
 on property:ro.boot.emmc=true
     start rmt_storage
-
-# Update WIFI MAC address
-service mac-update /system/bin/logwrapper /system/bin/mac-update
-    class main
-    user root
-    oneshot
     
 service config_bluetooth /system/bin/sh /system/etc/init.qcom.bt.sh "onboot"
     class core
@@ -517,10 +503,16 @@ service qseecomd /system/bin/qseecomd
     class core
     user root
     group root
-    
+
+service mac-update /system/bin/mac-update
+    class late_start
+    user system
+    group system wifi
+    oneshot
+
 service wcnss-service /system/bin/wcnss_service
    class late_start
-   user root
+   user system
    group system wifi
    oneshot
    
