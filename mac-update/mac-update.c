@@ -24,6 +24,8 @@
 #include <sys/stat.h>
 #include <unistd.h>
 #include <fcntl.h>
+#define LOG_TAG "mac-update"
+#include <cutils/log.h>
 
 static char mac_string[256];
 static char mac[6];
@@ -87,16 +89,16 @@ int main(int argc, char **argv)
     char msg[WCNSS_MAX_CMD_LEN];
 
     if (read_mac(MAC_FILE)) {
-        fprintf(stderr, "Failed to read MAC");
+        ALOGE("Failed to read MAC");
         exit(EINVAL);
     }
 
     if (!strcmp(mac_string, EMPTY_MAC)) {
-        fprintf(stderr, "MAC empty");
+        ALOGE("MAC empty");
         exit(EINVAL);
     }
     
-    fprintf(stderr, "Found MAC address %s\n", mac_string);
+    ALOGI("Found MAC address %s\n", mac_string);
     
     if (argc == 2 && !strcmp(argv[1], "-v")){
         exit(0);
@@ -104,7 +106,7 @@ int main(int argc, char **argv)
 
     fd = open(WCNSS_CTRL, O_WRONLY);
     if (fd < 0) {
-        fprintf(stderr, "Failed to open %s : %s\n", WCNSS_CTRL, strerror(errno));
+        ALOGE("Failed to open %s : %s\n", WCNSS_CTRL, strerror(errno));
         exit(EINVAL);
     }
 
@@ -118,7 +120,7 @@ int main(int argc, char **argv)
     msg[pos++] = mac[5];
 
     if (write(fd, msg, pos) < 0) {
-        fprintf(stderr, "Failed to write to %s : %s\n", WCNSS_CTRL, strerror(errno));
+        ALOGE("Failed to write to %s : %s\n", WCNSS_CTRL, strerror(errno));
     }
 
     close(fd);
