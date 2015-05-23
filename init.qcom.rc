@@ -189,6 +189,10 @@ on boot
     #Gionee xuna add for autommitest, 20140724
     chmod 0777 /sys/class/leds/button-backlight/brightness
 
+    # port-bridge
+    chmod 0660 /dev/smd0
+    chown system system /dev/smd0
+    
     # Assign TCP buffer thresholds to be ceiling value of technology maximums
     # Increased technology maximums should be reflected here.
     write /proc/sys/net/core/rmem_max  2097152
