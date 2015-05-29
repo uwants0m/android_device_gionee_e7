@@ -214,6 +214,9 @@ on post-fs-data
     # to observe dnsmasq.leases file for dhcp information of soft ap.
     chown dhcp system /data/misc/dhcp
     
+    # Update WIFI MAC address
+    mkdir /data/misc/wifi/prima 0775 wifi wifi
+    
     # Create the directories used by CnE subsystem
     mkdir /data/connectivity 0771 system system
     chown system system /data/connectivity
@@ -444,7 +447,6 @@ service qmuxd /system/bin/qmuxd
     class main
     user radio
     group radio audio bluetooth gps qcom_diag
-    disabled
 
 service audiod /system/bin/audiod
     class main
@@ -496,14 +498,14 @@ service qseecomd /system/bin/qseecomd
 
 service mac-update /system/bin/mac-update
     class late_start
-    user system
-    group system wifi
+    user wifi
     oneshot
 
 service wcnss-service /system/bin/wcnss_service
    class late_start
    user system
    group system wifi
+   disabled
    oneshot
    
 service p2p_supplicant /system/bin/wpa_supplicant \
