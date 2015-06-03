@@ -1,94 +1,128 @@
-/* To FreeXperia from a friend :) */
+/*
+ *  Copyright (C) 2015 The OmniROM Project
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ */
 
 #include <stdio.h>
 #include <stdlib.h>
 #include <errno.h>
+#include <string.h>
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <unistd.h>
-#include "mac-update.h"
+#include <fcntl.h>
+#define LOG_TAG "mac-update"
+#include <cutils/log.h>
 
-int read_mac(const char *filename, char *buf)
+static char mac_string[256];
+static char mac[6];
+
+#define MAC_FILE "/data/opponvitems/4678"
+#define EMPTY_MAC "000000000000"
+
+/* control messages to wcnss driver */
+#define WCNSS_USR_CTRL_MSG_START    0x00000000
+#define WCNSS_USR_SERIAL_NUM        (WCNSS_USR_CTRL_MSG_START + 1)
+#define WCNSS_USR_HAS_CAL_DATA      (WCNSS_USR_CTRL_MSG_START + 2)
+#define WCNSS_USR_WLAN_MAC_ADDR     (WCNSS_USR_CTRL_MSG_START + 3)
+
+#define WCNSS_CTRL      "/dev/wcnss_ctrl"
+#define WCNSS_MAX_CMD_LEN  (128)
+#define BYTE_0  0
+#define BYTE_1  8
+
+int read_mac(const char *filename)
 {
-	int ret;
+    char raw[6];
+    FILE *fp = NULL;
+    int numtries = 0;
+    int ret;
 
-	FILE *f = fopen(filename, "r");
-	if (!f)
-		return -ENOENT;
-	ret = fscanf(f, "%hhx:%hhx:%hhx:%hhx:%hhx:%hhx", &buf[0], &buf[1],
-		     &buf[2], &buf[3], &buf[4], &buf[5]);
-	fclose(f);
-	if (ret != 6) {
-		return -EINVAL;
-	}
-	return 0;
+    memset(raw, 0, 6);
+    memset(mac, 0, 6);
+
+    //Try to open the file once every 4 seconds for 120 seconds
+    while(fp == NULL && numtries++ < 30) {
+        fp = fopen(filename, "r");
+        if(fp == NULL) {
+            sleep(4);
+        }
+    }
+
+    //if it's still not open, bomb out
+    if (fp == NULL)
+        return ENOENT;
+
+    ret = fread(raw, 6, 1, fp);
+    fclose(fp);
+
+    // swap bytes
+    mac[0] = raw[5];
+    mac[1] = raw[4];
+    mac[2] = raw[3];
+    mac[3] = raw[2];
+    mac[4] = raw[1];
+    mac[5] = raw[0];
+
+    sprintf(mac_string, "%02X%02X%02X%02X%02X%02X", mac[0], mac[1], mac[2], mac[3], mac[4], mac[5]);
+
+    return 0;
 }
-
-#define UPD_MAC(file, offset) \
-do { \
-	if (read_mac(file, buf + offset)) { \
-		perror("Warning. Failed to read mac from " #file " - skipping"); \
-	} \
-} while(0)
-
 
 int main(int argc, char **argv)
 {
-	char *buf;
-	struct stat statbuf;
-	int ret;
-	size_t actual;
-	FILE *f;
+    int pos = 0;
+    int fd = 0;
+    char msg[WCNSS_MAX_CMD_LEN];
 
-	ret = stat(NV_IN, &statbuf);
-	if (ret) {
-		perror("Failed to stat " NV_IN);
-		exit(EINVAL);
-	}
-	f = fopen(NV_IN, "r");
-	if (!f) {
-		perror("Failed to open " NV_IN);
-		exit(EINVAL);
-	}
+    if (read_mac(MAC_FILE)) {
+        ALOGE("Failed to read MAC");
+        exit(EINVAL);
+    }
 
-	if (statbuf.st_size < 100) {
-		perror("nv file too small");
-		exit(EINVAL);
-	}
+    if (!strcmp(mac_string, EMPTY_MAC)) {
+        ALOGE("MAC empty");
+        exit(EINVAL);
+    }
+    
+    ALOGI("Found MAC address %s\n", mac_string);
+    
+    if (argc == 2 && !strcmp(argv[1], "-v")){
+        exit(0);
+    }
 
-	if (statbuf.st_size != NV_SIZE)
-		perror("Warning - size invalid");
+    fd = open(WCNSS_CTRL, O_WRONLY);
+    if (fd < 0) {
+        ALOGE("Failed to open %s : %s\n", WCNSS_CTRL, strerror(errno));
+        exit(EINVAL);
+    }
 
-	buf = malloc(statbuf.st_size);
-	if (!buf) {
-		perror("malloc failed");
-		exit(ENOMEM);
-	}
+    msg[pos++] = WCNSS_USR_WLAN_MAC_ADDR >> BYTE_1;
+    msg[pos++] = WCNSS_USR_WLAN_MAC_ADDR >> BYTE_0;
+    msg[pos++] = mac[0];
+    msg[pos++] = mac[1];
+    msg[pos++] = mac[2];
+    msg[pos++] = mac[3];
+    msg[pos++] = mac[4];
+    msg[pos++] = mac[5];
 
-	actual = fread(buf, 1, statbuf.st_size, f);
-	if (actual != statbuf.st_size) {
-		perror("Failed to read from nv");
-		exit(EINVAL);
-	}
-	fclose(f);
+    if (write(fd, msg, pos) < 0) {
+        ALOGE("Failed to write to %s : %s\n", WCNSS_CTRL, strerror(errno));
+    }
 
-	UPD_MAC(MAC0_FILE, MAC0_OFFSET);
-	UPD_MAC(MAC1_FILE, MAC1_OFFSET);
-	UPD_MAC(MAC2_FILE, MAC2_OFFSET);
-	UPD_MAC(MAC3_FILE, MAC3_OFFSET);
-
-	f = fopen(NV_OUT, "w+");
-	if (!f) {
-		perror("Failed to open " NV_OUT);
-		exit(EINVAL);
-	}
-	actual = fwrite(buf, 1, statbuf.st_size, f);
-	if (actual != statbuf.st_size) {
-		perror("Failed to write to nv");
-		exit(EINVAL);
-	}
-
-	fclose(f);
-
-	return 0;
+    close(fd);
+    return 0;
 }
