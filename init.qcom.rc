@@ -291,8 +291,6 @@ on post-fs-data
     setprop qcom.audio.init complete
     
     mkdir /data/audio/ 0770 media audio
-    # Enable the setgid bit on the directory
-    chmod 2770 /data/audio
 
     # Tombstone dropboxes
     mkdir /data/tombstones 0771 system system
