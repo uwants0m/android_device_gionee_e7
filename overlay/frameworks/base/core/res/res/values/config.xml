@@ -26,6 +26,15 @@
          autodetected from the Configuration. -->
     <bool name="config_showNavigationBar">false</bool>
 
+    <!-- Default color for notification LED is blue. -->
+    <color name="config_defaultNotificationColor">#ff0000ff</color>
+
+    <!-- Is the notification LED intrusive? Used to decide if there should be a disable option -->
+    <bool name="config_intrusiveNotificationLed">true</bool>
+
+    <!-- Is the battery LED intrusive? Used to decide if there should be a disable option -->
+    <bool name="config_intrusiveBatteryLed">true</bool>
+    
     <!-- Flag indicating whether the we should enable the automatic brightness in Settings.
          Software implementation will be used if config_hardware_auto_brightness_available is not set -->
     <bool name="config_automatic_brightness_available">true</bool>
@@ -41,19 +50,16 @@
 
          Must be overridden in platform specific overlays -->
     <integer-array name="config_autoBrightnessLevels">
-        <item>2</item>
-        <item>7</item>
-        <item>15</item>
+        <item>10</item>
         <item>50</item>
         <item>100</item>
         <item>200</item>
         <item>400</item>
+        <item>500</item>
+        <item>800</item>
         <item>1000</item>
-        <item>2000</item>
+        <item>1600</item>
         <item>3000</item>
-        <item>5000</item>
-        <item>10000</item>
-        <item>30000</item>
     </integer-array>
 
     <!-- Array of output values for LCD backlight corresponding to the LUX values
@@ -61,32 +67,56 @@
          than the size of the config_autoBrightnessLevels array.
          This must be overridden in platform specific overlays -->
     <integer-array name="config_autoBrightnessLcdBacklightValues">
-        <item>13</item>   <!-- 0-2 -->
-        <item>25</item>   <!-- 3-7 -->
-        <item>32</item>   <!-- 5-15 -->
-        <item>41</item>   <!-- 15-50 -->
-        <item>52</item>   <!-- 50-100 -->
-        <item>62</item>   <!-- 100-200 -->
-        <item>69</item>   <!-- 200-400 -->
-        <item>78</item>   <!-- 400-1000 -->
-        <item>88</item>   <!-- 1000-2000 -->
-        <item>134</item>  <!-- 2000-3000 -->
-        <item>178</item>  <!-- 3000-5000 -->
-        <item>225</item>  <!-- 5000-10000 -->
-        <item>255</item>  <!-- 10000-30000 -->
-        <item>255</item>  <!-- 30000+ -->
+        <item>14</item>   <!-- 0-10 -->
+        <item>28</item>   <!-- 10-50 -->
+        <item>37</item>   <!-- 50-100 -->
+        <item>51</item>   <!-- 100-200 -->
+        <item>71</item>   <!-- 200-400 -->
+        <item>80</item>   <!-- 400-500 -->
+        <item>96</item>   <!-- 500-800 -->
+        <item>108</item>  <!-- 800-1000 -->
+        <item>144</item>  <!-- 1000-1600 -->
+        <item>181</item>  <!-- 1600-3000 -->
+        <item>255</item>  <!-- 3000+ -->
     </integer-array>
-
-    <!-- Minimum screen brightness allowed by the power manager. -->
-    <integer name="config_screenBrightnessDim">80</integer>
-
-    <!-- Default screen brightness setting.
-         Must be in the range specified by minimum and maximum. -->
-    <integer name="config_screenBrightnessSettingDefault">82</integer>
+    
+    <!-- Array of output values for button backlight corresponding to the LUX values
+         in the config_autoBrightnessLevels array.  This array should have size one greater
+         than the size of the config_autoBrightnessLevels array.
+         This must be overridden in platform specific overlays -->
+    <integer-array name="config_autoBrightnessButtonBacklightValues">
+        <item>14</item>   <!-- 0-10 -->
+        <item>28</item>   <!-- 10-50 -->
+        <item>37</item>   <!-- 50-100 -->
+        <item>51</item>   <!-- 100-200 -->
+        <item>71</item>   <!-- 200-400 -->
+        <item>80</item>   <!-- 400-500 -->
+        <item>96</item>   <!-- 500-800 -->
+        <item>108</item>  <!-- 800-1000 -->
+        <item>144</item>  <!-- 1000-1600 -->
+        <item>181</item>  <!-- 1600-3000 -->
+        <item>255</item>  <!-- 3000+ -->
+    </integer-array
+    
+    <!-- Boolean indicating whether we want button brightness support -->
+    <bool name="config_button_brightness_support">true</bool>
 
     <!-- Minimum screen brightness setting allowed by the power manager.
          The user is forbidden from setting the brightness below this level. -->
-    <integer name="config_screenBrightnessSettingMinimum">80</integer>
+    <integer name="config_screenBrightnessSettingMinimum">2</integer>
+
+    <!-- Maximum screen brightness allowed by the power manager.
+         The user is forbidden from setting the brightness above this level. -->
+    <integer name="config_screenBrightnessSettingMaximum">255</integer>
+
+    <!-- Default screen brightness setting.
+         Must be in the range specified by minimum and maximum. -->
+    <integer name="config_screenBrightnessSettingDefault">100</integer>
+
+    <!-- Screen brightness used to dim the screen when the user activity
+         timeout expires.  May be less than the minimum allowed brightness setting
+         that can be set by the user. -->
+    <integer name="config_screenBrightnessDim">20</integer>
 
     <!-- The duration (in milliseconds) that the radio will scan for a signal
          when there's no network connection. If the scan doesn't timeout, use zero -->
@@ -97,24 +127,6 @@
 
     <!-- Set to true to add links to Cell Broadcast app from Settings and MMS app. -->
     <bool name="config_cellBroadcastAppLinks">true</bool>
-
-    <!-- Is the notification LED intrusive? Used to decide if there should be a disable option -->
-    <bool name="config_intrusiveNotificationLed">true</bool>
-
-    <!-- Is the battery LED intrusive? Used to decide if there should be a disable option -->
-<!--    <bool name="config_intrusiveBatteryLed">true</bool> -->
-
-    <!-- Does the battery LED support multiple colors? Used to decide if the user can change the colors -->
-<!--    <bool name="config_multiColorBatteryLed">true</bool> -->
-
-    <!-- Default color for notification LED is white. -->
-    <color name="config_defaultNotificationColor">#ffffffff</color>
-
-    <!-- Default LED on time for notification LED in milliseconds. -->
-    <integer name="config_defaultNotificationLedOn">1000</integer>
-
-    <!-- Default LED off time for notification LED in milliseconds. -->
-    <integer name="config_defaultNotificationLedOff">9000</integer>
 
     <!-- reference volume index for music stream to limit headphone volume and display warning -->
     <integer name="config_safe_media_volume_index">6</integer>
