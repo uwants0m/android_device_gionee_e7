@@ -28,7 +28,7 @@ TARGET_BOARD_PLATFORM := msm8974
 TARGET_BOARD_PLATFORM_GPU := qcom-adreno330
 
 BOARD_KERNEL_SEPARATED_DT := true
-BOARD_KERNEL_CMDLINE := console=ttyHSL0,115200,n8 androidboot.selinux=disabled androidboot.hardware=qcom loglevel=1 maxcpus=2 user_debug=31 msm_rtb.filter=0x37 ehci-hcd.park=3
+BOARD_KERNEL_CMDLINE := console=ttyHSL0,115200,n8 androidboot.selinux=permissive androidboot.hardware=qcom loglevel=1 maxcpus=2 user_debug=31 msm_rtb.filter=0x37 ehci-hcd.park=3
 BOARD_KERNEL_BASE := 0x00000000
 BOARD_KERNEL_PAGESIZE := 2048
 BOARD_CUSTOM_BOOTIMG_MK := device/gionee/e7/mkbootimg.mk
@@ -120,12 +120,12 @@ EXTENDED_FONT_FOOTPRINT := true
 TARGET_PROVIDES_POWERHAL := true
 
 # selinux
-#include device/qcom/sepolicy/sepolicy.mk
+include device/qcom/sepolicy/sepolicy.mk
 
-#BOARD_SEPOLICY_DIRS += \
- #   device/gionee/e7/sepolicy
+BOARD_SEPOLICY_DIRS += \
+    device/gionee/e7/sepolicy
 
-#BOARD_SEPOLICY_UNION += \
+BOARD_SEPOLICY_UNION += \
     device.te \
     file_contexts \
     file.te \
