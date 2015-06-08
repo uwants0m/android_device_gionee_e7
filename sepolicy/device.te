@@ -1,5 +1,5 @@
 ###########################
-# OmniROM oppo common sepolicy
+# OmniROM e7 common sepolicy
 #
 
 type modem_block_device, dev_type;
