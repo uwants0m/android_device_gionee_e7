@@ -92,7 +92,6 @@ DEVICE_PACKAGE_OVERLAYS := \
     device/gionee/e7/overlay
 
 PRODUCT_PACKAGES := \
-    mac-update \
     libwpa_client \
     hostapd \
     dhcpcd.conf \
@@ -132,7 +131,6 @@ PRODUCT_PACKAGES += \
     audio.a2dp.default \
     audio.usb.default \
     audio.r_submix.default \
-    camera-wrapper.msm8974 \
     libaudio-resampler \
     audiod \
     libqcompostprocbundle \
