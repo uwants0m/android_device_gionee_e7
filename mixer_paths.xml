@@ -1,11 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <mixer>
-    <!-- Audience es325 initial mixer settings begin-->
-    <ctl name="Set Power State" value="Sleep" />
-    <ctl name="Internal Route Config" value="9" />
-    <ctl name="ES325 RX1 Enable" value="0" />
-    <ctl name="ES325 TX1 Enable" value="0" />
-    <!-- Audience es325 initial mixer settings end-->
     <!-- These are the initial mixer settings -->
     <ctl name="Voice Rx Device Mute" id="0" value="0" />
     <ctl name="Voice Rx Device Mute" id="1" value="-1" />
