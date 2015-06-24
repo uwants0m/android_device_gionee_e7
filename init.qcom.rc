@@ -288,8 +288,6 @@ on post-fs-data
     # Create /data/time folder for time-services
     mkdir /data/time/ 0700 system system
     
-    setprop qcom.audio.init complete
-    
     mkdir /data/audio/ 0770 media audio
 
     # Tombstone dropboxes
@@ -299,6 +297,7 @@ on post-fs-data
     mkdir /data/tombstones/wcnss 0771 system system
     mkdir /data/tombstones/dsps 0771 system system
     
+    setprop qcom.audio.init complete
     setprop vold.post_fs_data_done 1
 
 # Export GPIO56 for fusion targets to enable/disable hub
