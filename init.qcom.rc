@@ -198,6 +198,7 @@ on boot
     write /proc/sys/net/core/rmem_max  2097152
     write /proc/sys/net/core/wmem_max  2097152
    
+    start qcamerasvr
     start sensors
     
 # msm specific files that need to be created on /data
@@ -562,6 +563,12 @@ service dhcpcd_bnep0 /system/bin/dhcpcd -BKLG
     disabled
     oneshot
 
+#start camera server as daemon
+service qcamerasvr /system/bin/mm-qcamera-daemon
+    class late_start
+    user camera
+    group camera system inet input graphics
+    
 service gpsone_daemon /system/bin/gpsone_daemon
     class late_start
     user gps
