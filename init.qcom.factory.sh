@@ -223,6 +223,5 @@
     start rmt_storage
     start qcom-c_main-sh
     start irsc_util
-    start qcamerasvr
     start qcom-usb-sh
     start qcomsysd
