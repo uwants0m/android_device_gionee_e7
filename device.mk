@@ -25,7 +25,7 @@ PRODUCT_COPY_FILES += \
     device/gionee/e7/rootdir/init.qcom.class_main.sh:root/init.qcom.class_main.sh \
     device/gionee/e7/rootdir/init.qcom.early_boot.sh:root/init.qcom.early_boot.sh \
     device/gionee/e7/rootdir/init.qcom.factory.sh:root/init.qcom.factory.sh \
-device/gionee/e7/rootdir/init.qcom.sh:root/init.qcom.sh \
+    device/gionee/e7/rootdir/init.qcom.sh:root/init.qcom.sh \
     device/gionee/e7/rootdir/init.qcom.ssr.sh:root/init.qcom.ssr.sh \
     device/gionee/e7/rootdir/init.qcom.syspart_fixup.sh:root/init.qcom.syspart_fixup.sh \
     device/gionee/e7/rootdir/init.qcom.usb.sh:root/init.qcom.usb.sh \
@@ -38,7 +38,7 @@ PRODUCT_COPY_FILES += \
     device/gionee/e7/rootdir/etc/hsic.control.bt.sh:system/etc/hsic.control.bt.sh \
     device/gionee/e7/rootdir/etc/init.qcom.bt.sh:system/etc/init.qcom.bt.sh \
  
-device/gionee/e7/rootdir/etc/usf_post_boot.sh:system/etc/usf_post_boot.sh \
+   device/gionee/e7/rootdir/etc/usf_post_boot.sh:system/etc/usf_post_boot.sh \
    device/gionee/e7/rootdir/etc/init.qcom.modem_links.sh:system/etc/init.qcom.modem_links.sh
 
 PRODUCT_COPY_FILES += \
