@@ -15,29 +15,31 @@
 
 # TWRP
 PRODUCT_COPY_FILES += \
-    device/gionee/e7/init.qcom.usb.rc:recovery/root/init.usb.rc \
-    device/gionee/e7/twrp.fstab:recovery/root/etc/twrp.fstab 
+    device/gionee/e7/rootdir/init.qcom.usb.rc:recovery/root/init.usb.rc \
+    device/gionee/e7/rootdir/twrp.fstab:recovery/root/etc/twrp.fstab 
 
 # E7 Init files
 PRODUCT_COPY_FILES += \
-    device/gionee/e7/init.qcom.rc:root/init.qcom.rc \
-    device/gionee/e7/init.qcom.class_core.sh:root/init.qcom.class_core.sh \
-    device/gionee/e7/init.qcom.class_main.sh:root/init.qcom.class_main.sh \
-    device/gionee/e7/init.qcom.early_boot.sh:root/init.qcom.early_boot.sh \
-    device/gionee/e7/init.qcom.factory.sh:root/init.qcom.factory.sh \
-    device/gionee/e7/init.qcom.sh:root/init.qcom.sh \
-    device/gionee/e7/init.qcom.ssr.sh:root/init.qcom.ssr.sh \
-    device/gionee/e7/init.qcom.syspart_fixup.sh:root/init.qcom.syspart_fixup.sh \
-    device/gionee/e7/init.qcom.usb.sh:root/init.qcom.usb.sh \
-    device/gionee/e7/init.qcom.usb.rc:root/init.qcom.usb.rc \
-    device/gionee/e7/fstab.qcom:root/fstab.qcom \
-    device/gionee/e7/ueventd.qcom.rc:root/ueventd.qcom.rc
+    device/gionee/e7/rootdir/init.qcom.rc:root/init.qcom.rc \
+    device/gionee/e7/rootdir/init.qcom.class_core.sh:root/init.qcom.class_core.sh \
+    device/gionee/e7/rootdir/init.qcom.class_main.sh:root/init.qcom.class_main.sh \
+    device/gionee/e7/rootdir/init.qcom.early_boot.sh:root/init.qcom.early_boot.sh \
+    device/gionee/e7/rootdir/init.qcom.factory.sh:root/init.qcom.factory.sh \
+device/gionee/e7/rootdir/init.qcom.sh:root/init.qcom.sh \
+    device/gionee/e7/rootdir/init.qcom.ssr.sh:root/init.qcom.ssr.sh \
+    device/gionee/e7/rootdir/init.qcom.syspart_fixup.sh:root/init.qcom.syspart_fixup.sh \
+    device/gionee/e7/rootdir/init.qcom.usb.sh:root/init.qcom.usb.sh \
+    device/gionee/e7/rootdir/init.qcom.usb.rc:root/init.qcom.usb.rc \
+    device/gionee/e7/rootdir/fstab.qcom:root/fstab.qcom \
+    device/gionee/e7/rootdir/ueventd.qcom.rc:root/ueventd.qcom.rc
 
 # system/etc files
 PRODUCT_COPY_FILES += \
-    device/gionee/e7/hsic.control.bt.sh:system/etc/hsic.control.bt.sh \
-    device/gionee/e7/init.qcom.bt.sh:system/etc/init.qcom.bt.sh \
-    device/gionee/e7/init.qcom.modem_links.sh:system/etc/init.qcom.modem_links.sh
+    device/gionee/e7/rootdir/etc/hsic.control.bt.sh:system/etc/hsic.control.bt.sh \
+    device/gionee/e7/rootdir/etc/init.qcom.bt.sh:system/etc/init.qcom.bt.sh \
+ 
+device/gionee/e7/rootdir/etc/usf_post_boot.sh:system/etc/usf_post_boot.sh \
+   device/gionee/e7/rootdir/etc/init.qcom.modem_links.sh:system/etc/init.qcom.modem_links.sh
 
 PRODUCT_COPY_FILES += \
     frameworks/av/media/libstagefright/data/media_codecs_google_audio.xml:system/etc/media_codecs_google_audio.xml \
@@ -48,9 +50,9 @@ PRODUCT_COPY_FILES += \
 
 # Config files for touch and input
 PRODUCT_COPY_FILES += \
-    device/gionee/e7/gpio-keys.kl:system/usr/keylayout/gpio-keys.kl \
-    device/gionee/e7/atmel_mxt_ts.kl:system/usr/keylayout/atmel_mxt_ts.kl \
-    device/gionee/e7/synaptics_rmi4_i2c.kl:system/usr/keylayout/synaptics_rmi4_i2c.kl
+    device/gionee/e7/keylayout/gpio-keys.kl:system/usr/keylayout/gpio-keys.kl \
+    device/gionee/e7/keylayout/atmel_mxt_ts.kl:system/usr/keylayout/atmel_mxt_ts.kl \
+    device/gionee/e7/keylayout/synaptics_rmi4_i2c.kl:system/usr/keylayout/synaptics_rmi4_i2c.kl
 
 # These are the hardware-specific features
 PRODUCT_COPY_FILES += \
@@ -83,8 +85,8 @@ PRODUCT_COPY_FILES += \
 
 # Wifi config
 PRODUCT_COPY_FILES += \
-    device/gionee/e7/p2p_supplicant_overlay.conf:system/etc/wifi/p2p_supplicant_overlay.conf \
-    device/gionee/e7/wpa_supplicant_overlay.conf:system/etc/wifi/wpa_supplicant_overlay.conf \
+    device/gionee/e7/wifi/p2p_supplicant_overlay.conf:system/etc/wifi/p2p_supplicant_overlay.conf \
+    device/gionee/e7/wifi/wpa_supplicant_overlay.conf:system/etc/wifi/wpa_supplicant_overlay.conf \
 
 PRODUCT_TAGS += dalvik.gc.type-precise
 
@@ -114,10 +116,10 @@ PRODUCT_PACKAGES += \
  
  PRODUCT_COPY_FILES += \
     frameworks/native/data/etc/android.hardware.nfc.xml:system/etc/permissions/android.hardware.nfc.xml \
-    device/gionee/e7/nfcee_access.xml:system/etc/nfcee_access.xml \
-    device/gionee/e7/nfc-nci.conf:system/etc/nfc-nci.conf \
-    device/gionee/e7/libnfc-brcm.conf:system/etc/libnfc-brcm.conf \
-    device/gionee/e7/libnfc-brcm-20791b05.conf:system/etc/libnfc-brcm-20791b05.conf
+    device/gionee/e7/nfc/nfcee_access.xml:system/etc/nfcee_access.xml \
+    device/gionee/e7/nfc/nfc-nci.conf:system/etc/nfc-nci.conf \
+    device/gionee/e7/nfc/libnfc-brcm.conf:system/etc/libnfc-brcm.conf \
+    device/gionee/e7/nfc/libnfc-brcm-20791b05.conf:system/etc/libnfc-brcm-20791b05.conf
     
 # Hardware modules to build
 PRODUCT_PACKAGES += \
@@ -155,17 +157,17 @@ PRODUCT_PACKAGES += \
 
 # sensors
 PRODUCT_COPY_FILES += \
-    device/gionee/e7/sap.conf:system/etc/sap.conf \
-    device/gionee/e7/sensor_def_qcomdev.conf:system/etc/sensor_def_qcomdev.conf
+    device/gionee/e7/sensor/sap.conf:system/etc/sap.conf \
+    device/gionee/e7/sensor/sensor_def_qcomdev.conf:system/etc/sensor_def_qcomdev.conf
 
 # MSM IPC Router security configuration
 PRODUCT_COPY_FILES += \
     device/gionee/e7/sec_config:system/etc/sec_config
 
 PRODUCT_COPY_FILES += \
-    device/gionee/e7/audio_effects.conf:system/vendor/etc/audio_effects.conf \
-    device/gionee/e7/audio_policy.conf:system/etc/audio_policy.conf \
-    device/gionee/e7/mixer_paths.xml:system/etc/mixer_paths.xml
+    device/gionee/e7/audio/audio_effects.conf:system/vendor/etc/audio_effects.conf \
+    device/gionee/e7/audio/audio_policy.conf:system/etc/audio_policy.conf \
+    device/gionee/e7/audio/mixer_paths.xml:system/etc/mixer_paths.xml
     
 # GPS configuration
 PRODUCT_COPY_FILES += \
