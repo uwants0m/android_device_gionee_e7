@@ -121,19 +121,19 @@ PRODUCT_PACKAGES += \
     
 # Hardware modules to build
 PRODUCT_PACKAGES += \
+    audiod \
     hwcomposer.msm8974 \
     gralloc.msm8974 \
     copybit.msm8974 \
     memtrack.msm8974 \
+    lights.e7 \
+    camera-wrapper.msm8974 \
     audio.primary.msm8974 \
     audio_policy.msm8974 \
-    lights.e7 \
     audio.a2dp.default \
     audio.usb.default \
     audio.r_submix.default \
-    camera-wrapper.msm8974 \
     libaudio-resampler \
-    audiod \
     libqcompostprocbundle \
     libqcomvisualizer \
     libqcomvoiceprocessing \
@@ -165,8 +165,7 @@ PRODUCT_COPY_FILES += \
 PRODUCT_COPY_FILES += \
     device/gionee/e7/audio_effects.conf:system/vendor/etc/audio_effects.conf \
     device/gionee/e7/audio_policy.conf:system/etc/audio_policy.conf \
-    device/gionee/e7/mixer_paths.xml:system/etc/mixer_paths.xml \
-    device/gionee/e7/audio_platform_info.xml:system/etc/audio_platform_info.xml
+    device/gionee/e7/mixer_paths.xml:system/etc/mixer_paths.xml
     
 # GPS configuration
 PRODUCT_COPY_FILES += \
