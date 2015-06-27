@@ -37,9 +37,8 @@ PRODUCT_COPY_FILES += \
 PRODUCT_COPY_FILES += \
     device/gionee/e7/rootdir/etc/hsic.control.bt.sh:system/etc/hsic.control.bt.sh \
     device/gionee/e7/rootdir/etc/init.qcom.bt.sh:system/etc/init.qcom.bt.sh \
- 
-   device/gionee/e7/rootdir/etc/usf_post_boot.sh:system/etc/usf_post_boot.sh \
-   device/gionee/e7/rootdir/etc/init.qcom.modem_links.sh:system/etc/init.qcom.modem_links.sh
+    device/gionee/e7/rootdir/etc/usf_post_boot.sh:system/etc/usf_post_boot.sh \
+    device/gionee/e7/rootdir/etc/init.qcom.modem_links.sh:system/etc/init.qcom.modem_links.sh
 
 PRODUCT_COPY_FILES += \
     frameworks/av/media/libstagefright/data/media_codecs_google_audio.xml:system/etc/media_codecs_google_audio.xml \
