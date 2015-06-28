@@ -166,7 +166,8 @@ PRODUCT_COPY_FILES += \
 PRODUCT_COPY_FILES += \
     device/gionee/e7/audio/audio_effects.conf:system/vendor/etc/audio_effects.conf \
     device/gionee/e7/audio/audio_policy.conf:system/etc/audio_policy.conf \
-    device/gionee/e7/audio/mixer_paths.xml:system/etc/mixer_paths.xml
+    device/gionee/e7/audio/mixer_paths.xml:system/etc/mixer_paths.xml \
+    device/gionee/e7/audio/mixer_paths_auxpcm.xml:system/etc/mixer_paths_auxpcm.xml
     
 # GPS configuration
 PRODUCT_COPY_FILES += \
