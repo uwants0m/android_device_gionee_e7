@@ -36,13 +36,13 @@ on init
     # Set permissions for persist partition
     mkdir /persist 0771 system system
 
-    mkdir /mnt/media_rw/sdcard0 0700 media_rw media_rw
-    mkdir /mnt/media_rw/sdcard1 0700 media_rw media_rw
-    mkdir /mnt/media_rw/usbdisk 0700 media_rw media_rw
+    mkdir /mnt/media_rw/sdcard0 0775 media_rw media_rw
+    mkdir /mnt/media_rw/sdcard1 0775 media_rw media_rw
+    mkdir /mnt/media_rw/usbdisk 0555 root root
 
-    mkdir /storage/sdcard0 0700 root root
-    mkdir /storage/sdcard1 0700 root root
-    mkdir /storage/usbdisk 0700 root root
+    mkdir /storage/sdcard0 0775 root root
+    mkdir /storage/sdcard1 0775 root root
+    mkdir /storage/usbdisk 0775 system system
 
     export EXTERNAL_STORAGE /storage/sdcard0
     export SECONDARY_STORAGE /storage/sdcard1:/storage/usbdisk
