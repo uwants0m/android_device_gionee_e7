@@ -116,8 +116,8 @@ TARGET_RELEASETOOLS_EXTENSIONS := device/gionee/e7
 # Include an expanded selection of fonts
 EXTENDED_FONT_FOOTPRINT := true
 
-# power hal
-TARGET_PROVIDES_POWERHAL := true
+# Healthd
+HEALTHD_ENABLE_TRICOLOR_LED := true
 
 # selinux
 #include device/qcom/sepolicy/sepolicy.mk
