@@ -119,6 +119,9 @@ EXTENDED_FONT_FOOTPRINT := true
 # Healthd
 HEALTHD_ENABLE_TRICOLOR_LED := true
 
+# power hal
+TARGET_PROVIDES_POWERHAL := true
+
 # selinux
 #include device/qcom/sepolicy/sepolicy.mk
 
