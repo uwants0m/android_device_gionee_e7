@@ -1,9 +1,5 @@
 [
   {
-    "remote": "omnirom",
-    "repository": "android_frameworks_av",
-    "target_path": "frameworks/av-caf",
-    "revision": "android-5.1-caf"  
   }
 ]
 
