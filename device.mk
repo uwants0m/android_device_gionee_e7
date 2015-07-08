@@ -122,23 +122,40 @@ PRODUCT_PACKAGES += \
     
 # Hardware modules to build
 PRODUCT_PACKAGES += \
-    audiod \
     hwcomposer.msm8974 \
     gralloc.msm8974 \
     copybit.msm8974 \
     memtrack.msm8974 \
     lights.e7 \
     camera-wrapper.msm8974 \
-    audio.primary.msm8974 \
-    audio_policy.msm8974 \
+    keystore.msm8974
+
+#Audio
+PRODUCT_PACKAGES += \
     audio.a2dp.default \
-    audio.usb.default \
+    audio.primary.msm8974 \
     audio.r_submix.default \
+    audio.usb.default \
     libaudio-resampler \
-    libqcompostprocbundle \
+    libacdbloader \
+    libacdbmapper \
+    libaudcal \
+    libaudioalsa \
+    libdiag
+
+# for audio.primary.msm8974
+PRODUCT_PACKAGES += \
+    libtinyalsa \
+    libtinycompress \
+    libaudioroute \
+    tinymix
+
+# Audio effects
+PRODUCT_PACKAGES += \
     libqcomvisualizer \
     libqcomvoiceprocessing \
-    keystore.msm8974
+    libqcomvoiceprocessingdescriptors \
+    libqcompostprocbundle
 
 PRODUCT_PACKAGES += \
     libmm-omxcore \
