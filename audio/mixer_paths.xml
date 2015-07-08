@@ -1,5 +1,11 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <mixer>
+    <!-- Audience es325 initial mixer settings begin-->
+    <ctl name="Set Power State" value="Sleep" />
+    <ctl name="Internal Route Config" value="9" />
+    <ctl name="ES325 RX1 Enable" value="0" />
+    <ctl name="ES325 TX1 Enable" value="0" />
+    <!-- Audience es325 initial mixer settings end-->
     <!-- These are the initial mixer settings -->
     <ctl name="Voice Rx Device Mute" id="0" value="0" />
     <ctl name="Voice Rx Device Mute" id="1" value="-1" />
@@ -900,7 +906,7 @@
     </path>
     
     <!-- Gionee Huangzhuolin 20141210 @ add for CR01423706 begin -->
-    <path name="voice-handset-mic">
+    <path name="voice-handset-mic-es325">
         <ctl name="AIF1_CAP Mixer SLIM TX7" value="1"/>
         <ctl name="AIF1_CAP Mixer SLIM TX8" value="1"/>
         <ctl name="SLIM_0_TX Channels" value="Two" />
@@ -959,9 +965,11 @@
     </path>
     
     <!-- Gionee Huangzhuolin 20141210 @ add for CR01423706 begin -->
-    <path name="voice-handset">
+    <path name="voice-handset-es325">
 		<ctl name="Set Power State" value="Active" />
 		<ctl name="Internal Route Config" value="0" />
+		<ctl name="ES325 RX1 Enable" value="1" />
+		<ctl name="ES325 TX1 Enable" value="1" />
         <ctl name="SLIM RX1 MUX" value="AIF1_PB" />
         <ctl name="SLIM_0_RX Channels" value="One" />
         <ctl name="RX1 MIX1 INP1" value="RX1" />
@@ -987,9 +995,10 @@
     </path>
 
     <!-- Gionee Huangzhuolin 20141217 @ add for CR01423706 begin -->
-    <path name="standard-rec">
+    <path name="standard-rec-es325">
 		<ctl name="Set Power State" value="Active" />
 		<ctl name="Internal Route Config" value="10" />
+		<ctl name="ES325 TX1 Enable" value="1" />
         <ctl name="AIF1_CAP Mixer SLIM TX7" value="1" />
         <ctl name="AIF1_CAP Mixer SLIM TX8" value="1" />
         <ctl name="SLIM TX7 MUX" value="DEC7" />
@@ -999,9 +1008,10 @@
         <ctl name="SLIM_0_TX Channels" value="Two" />
     </path>
 
-    <path name="zoom-rec">
+    <path name="zoom-rec-es325">
 		<ctl name="Set Power State" value="Active" />
 		<ctl name="Internal Route Config" value="8" />
+		<ctl name="ES325 TX1 Enable" value="1" />
         <ctl name="AIF1_CAP Mixer SLIM TX7" value="1" />
         <ctl name="AIF1_CAP Mixer SLIM TX8" value="1" />
         <ctl name="SLIM TX7 MUX" value="DEC10" />
@@ -1011,9 +1021,10 @@
         <ctl name="SLIM_0_TX Channels" value="Two" />
     </path>
 
-    <path name="anc-rec">
+    <path name="anc-rec-es325">
 		<ctl name="Set Power State" value="Active" />
 		<ctl name="Internal Route Config" value="7" />
+		<ctl name="ES325 TX1 Enable" value="1" />
         <ctl name="AIF1_CAP Mixer SLIM TX7" value="1" />
         <ctl name="AIF1_CAP Mixer SLIM TX8" value="1" />
         <ctl name="SLIM TX7 MUX" value="DEC10" />
@@ -1023,7 +1034,7 @@
         <ctl name="SLIM_0_TX Channels" value="Two" />
     </path>
 
-    <path name="iflytek-rec">
+    <path name="iflytek-rec-es325">
         <ctl name="AIF1_CAP Mixer SLIM TX7" value="1" />
         <ctl name="SLIM_0_TX Channels" value="One" />
         <ctl name="SLIM TX7 MUX" value="DEC1" />
@@ -1032,9 +1043,11 @@
     </path>
     <!-- Gionee Huangzhuolin 20141217 @ add for CR01423706 end -->
     <!-- Gionee Huangzhuolin 20141210 @ add for CR01423706 begin -->
-    <path name="voice-speaker">
+    <path name="voice-speaker-es325">
 		<ctl name="Set Power State" value="Active" />
 		<ctl name="Internal Route Config" value="1" />
+		<ctl name="ES325 RX1 Enable" value="1" />
+		<ctl name="ES325 TX1 Enable" value="1" />
         <ctl name="SLIM RX1 MUX" value="AIF1_PB" />
         <ctl name="RX3 MIX1 INP1" value="RX1" />
         <ctl name="SLIM_0_RX Channels" value="One" />
@@ -1049,9 +1062,11 @@
     </path>
 
     <!-- Gionee Huangzhuolin 20141210 @ add for CR01423706 begin -->
-    <path name="voice-speaker-mic">
+    <path name="voice-speaker-mic-es325">
 		<ctl name="Set Power State" value="Active" />
 		<ctl name="Internal Route Config" value="1" />
+		<ctl name="ES325 RX1 Enable" value="1" />
+		<ctl name="ES325 TX1 Enable" value="1" />
         <ctl name="AIF1_CAP Mixer SLIM TX7" value="1"/>
         <ctl name="AIF1_CAP Mixer SLIM TX8" value="1"/>
         <ctl name="SLIM_0_TX Channels" value="Two" />
@@ -1070,9 +1085,11 @@
     </path>
 
     <!-- Gionee Huangzhuolin 20141210 @ add for CR01423706 begin -->
-    <path name="voice-headphones">
+    <path name="voice-headphones-es325">
 		<ctl name="Set Power State" value="Active" />
 		<ctl name="Internal Route Config" value="3" />
+		<ctl name="ES325 RX1 Enable" value="1" />
+		<ctl name="ES325 TX1 Enable" value="1" />
         <path name="headphones" />
 		<ctl name="IIR1 Enable Band1" value="1" />
 		<ctl name="IIR1 Enable Band2" value="1" />
@@ -1098,7 +1115,7 @@
     </path>
 	
     <!-- Gionee Huangzhuolin 20141210 @ add for CR01423706 begin -->
-    <path name="voice-headset-mic">
+    <path name="voice-headset-mic-es325">
         <ctl name="AIF1_CAP Mixer SLIM TX7" value="1"/>
         <ctl name="SLIM_0_TX Channels" value="One" />
         <ctl name="SLIM TX7 MUX" value="DEC5" />
