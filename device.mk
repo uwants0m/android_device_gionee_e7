@@ -147,8 +147,12 @@ PRODUCT_PACKAGES += \
 PRODUCT_PACKAGES += \
     libtinyalsa \
     libtinycompress \
-    libaudioroute \
-    tinymix
+    tinymix \
+    tinyplay \
+    tinycap \
+    tinypcminfo \
+    libtinyxml \
+    libtinyxml2
 
 # Audio effects
 PRODUCT_PACKAGES += \
