@@ -53,12 +53,6 @@ on property:bluetooth.hsic_ctrl=load_wlan
 on property:bluetooth.hsic_ctrl=unbind_hsic
     start bt_hsic_control
 
-#start camera server as daemon
-service qcamerasvr /system/bin/mm-qcamera-daemon
-    class late_start
-    user camera
-    group camera system inet input graphics
-
 #start gesture server as daemon
 service qgesturesvr /system/bin/mm-gesture-daemon
     class late_start
@@ -169,17 +163,6 @@ service imsdatadaemon /system/bin/imsdatadaemon
     group ims radio wifi net_raw log qcom_diag net_admin
     disabled
 
-service qca6234-service /system/bin/sh /system/etc/qca6234-service.sh
-    class late_start
-    user root
-    oneshot
-
-service wcnss-service /system/bin/wcnss_service
-    class late_start
-    user system
-    group system wifi
-    oneshot
-
 on property:sys.ims.QMI_DAEMON_STATUS=1
     start imsdatadaemon
 
@@ -192,12 +175,3 @@ service ims_rtp_daemon /system/bin/ims_rtp_daemon
 
 on property:sys.ims.DATA_DAEMON_STATUS=1
     start ims_rtp_daemon
-
-service ppd /system/bin/mm-pp-daemon
-    class late_start
-    user system
-    socket pps stream 0660 system system
-    group system graphics
-
-on property:init.svc.surfaceflinger=stopped
-    stop ppd
