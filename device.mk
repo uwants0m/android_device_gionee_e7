@@ -30,6 +30,7 @@ PRODUCT_COPY_FILES += \
     device/gionee/e7/rootdir/init.qcom.syspart_fixup.sh:root/init.qcom.syspart_fixup.sh \
     device/gionee/e7/rootdir/init.qcom.usb.sh:root/init.qcom.usb.sh \
     device/gionee/e7/rootdir/init.qcom.usb.rc:root/init.qcom.usb.rc \
+    device/gionee/e7/rootdir/init.target.rc:root/init.target.rc \
     device/gionee/e7/rootdir/fstab.qcom:root/fstab.qcom \
     device/gionee/e7/rootdir/ueventd.qcom.rc:root/ueventd.qcom.rc
 
