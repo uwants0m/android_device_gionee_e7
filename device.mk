@@ -133,6 +133,8 @@ PRODUCT_PACKAGES += \
 
 #Audio
 PRODUCT_PACKAGES += \
+    audiod \
+    audio_policy.msm8974 \
     audio.a2dp.default \
     audio.primary.msm8974 \
     audio.r_submix.default \
