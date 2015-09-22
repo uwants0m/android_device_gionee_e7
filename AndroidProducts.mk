@@ -15,4 +15,4 @@
 #
 
 PRODUCT_MAKEFILES := \
-    $(LOCAL_DIR)/cm_e7.mk \
+    $(LOCAL_DIR)/e7.mk \
