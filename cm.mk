@@ -30,7 +30,7 @@ TARGET_BOOTANIMATION_SIZE := 720x480
 $(call inherit-product, vendor/omni/config/common.mk)
 
 # Inherit from hardware-specific part of the product configuration
-$(call inherit-product, device/gionee/e7/device.mk)
+$(call inherit-product, device/gionee/e7/e7.mk)
 
 PRODUCT_NAME := cm_e7
 PRODUCT_DEVICE := e7
