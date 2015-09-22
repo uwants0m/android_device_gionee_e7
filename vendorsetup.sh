@@ -15,4 +15,4 @@
 #
 
 add_lunch_combo cm_e7-userdebug
-e7-userdebug
+
