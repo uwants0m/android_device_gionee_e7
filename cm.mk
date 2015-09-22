@@ -14,20 +14,16 @@
 # limitations under the License.
 #
 
-# Sample: This is where we'd set a backup provider if we had one
-# $(call inherit-product, device/sample/products/backup_overlay.mk)
+# Boot animation
+TARGET_SCREEN_HEIGHT := 1920
+TARGET_SCREEN_WIDTH := 1080
+TARGET_CONTINUOUS_SPLASH_ENABLED := true
 
-# Inherit APNs list
-$(call inherit-product, vendor/omni/config/gsm.mk)
+# Inherit from those products. Most specific first
+$(call inherit-product, $(SRC_TARGET_DIR)/product/full_base_telephony.mk)
 
-# Inherit from the common Open Source product configuration
-$(call inherit-product, $(SRC_TARGET_DIR)/product/aosp_base_telephony.mk)
-
-# must be before including omni part
-TARGET_BOOTANIMATION_SIZE := 720x480
-
-# Inherit from our custom product configuration
-$(call inherit-product, vendor/omni/config/common.mk)
+# Inherit some common CM stuff.
+$(call inherit-product, vendor/cm/config/common_mini_phone.mk)
 
 # Inherit from hardware-specific part of the product configuration
 $(call inherit-product, device/gionee/e7/e7.mk)
