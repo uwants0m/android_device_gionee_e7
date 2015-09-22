@@ -15,4 +15,4 @@
 #
 
 add_lunch_combo omni_e7-userdebug
-add_lunch_combo omni_e7-eng
+e7-userdebug
