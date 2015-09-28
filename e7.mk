@@ -92,6 +92,7 @@ PRODUCT_COPY_FILES += \
 PRODUCT_COPY_FILES += \
     device/gionee/e7/wifi/p2p_supplicant_overlay.conf:system/etc/wifi/p2p_supplicant_overlay.conf \
     device/gionee/e7/wifi/wpa_supplicant_overlay.conf:system/etc/wifi/wpa_supplicant_overlay.conf \
+device/gionee/e7/wifi/wpa_supplicant.conf:system/etc/wifi/wpa_supplicant.conf
 
 PRODUCT_TAGS += dalvik.gc.type-precise
 
