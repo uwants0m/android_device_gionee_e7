@@ -99,20 +99,29 @@ PRODUCT_TAGS += dalvik.gc.type-precise
 DEVICE_PACKAGE_OVERLAYS := \
     device/gionee/e7/overlay
 
-PRODUCT_PACKAGES := \
+PRODUCT_PACKAGES += \
+    dhcpcd.conf \
     libwpa_client \
     hostapd \
-    dhcpcd.conf \
-    wcnss_service \
     wpa_supplicant \
-    wpa_supplicant.conf
+    wpa_supplicant.conf \
+    wpa_supplicant_overlay.conf \
+    p2p_supplicant_overlay.conf \
+    hostapd_default.conf \
+    hostapd.accept \
+    hostapd.deny
+
+# SoftAP
+PRODUCT_PACKAGES += \
+    libqsap_sdk \
+    libQWiFiSoftApCfg \
+    wcnss_service
 
 # Live Wallpapers
 PRODUCT_PACKAGES += \
     LiveWallpapers \
     LiveWallpapersPicker \
-    VisualizationWallpapers \
-    librs_jni
+    VisualizationWallpapers
 
 # NFC packages
 PRODUCT_PACKAGES += \
@@ -127,62 +136,49 @@ PRODUCT_PACKAGES += \
     device/gionee/e7/nfc/libnfc-brcm-20791b05.conf:system/etc/libnfc-brcm-20791b05.conf \
     device/gionee/e7/nfc/nfcee_access.xml:system/etc/nfcee_access.xml
     
-# Hardware modules to build
+# Media & Audio
 PRODUCT_PACKAGES += \
-    hwcomposer.msm8974 \
-    gralloc.msm8974 \
-    copybit.msm8974 \
-    memtrack.msm8974 \
-    lights.e7 \
-    camera-wrapper.msm8974 \
-    keystore.msm8974
+    libc2dcolorconvert \
+    libdivxdrmdecrypt \
+    libdashplayer \
+    libOmxAacEnc \
+    libOmxAmrEnc \
+    libOmxCore \
+    libOmxEvrcEnc \
+    libOmxQcelp13Enc \
+    libOmxVdec \
+    libOmxVdecHevc \
+    libOmxVenc \
+    libstagefrighthw \
+    qcmediaplayer
 
-#Audio
+PRODUCT_BOOT_JARS += qcmediaplayer
+
 PRODUCT_PACKAGES += \
     audiod \
-    audio_policy.msm8974 \
     audio.a2dp.default \
+    audio_policy.msm8974 \
     audio.primary.msm8974 \
     audio.r_submix.default \
     audio.usb.default \
     libaudio-resampler \
-    libacdbloader \
-    libacdbmapper \
-    libaudcal \
-    libaudioalsa \
-    libdiag
-
-# for audio.primary.msm8974
-PRODUCT_PACKAGES += \
-    libtinyalsa \
-    libtinycompress \
-    tinymix \
-    tinyplay \
-    tinycap \
-    tinypcminfo \
-    libtinyxml \
-    libtinyxml2
-
-# Audio effects
-PRODUCT_PACKAGES += \
+    libqcompostprocbundle \
     libqcomvisualizer \
     libqcomvoiceprocessing \
-    libqcomvoiceprocessingdescriptors \
-    libqcompostprocbundle
+    tinymix \
+    libtinyxml2
 
+# Graphics
 PRODUCT_PACKAGES += \
-    libmm-omxcore \
-    libdivxdrmdecrypt \
-    libOmxVdec \
-    libOmxVenc \
-    libOmxCore \
-    libstagefrighthw \
-    libc2dcolorconvert
+    copybit.msm8974 \
+    gralloc.msm8974 \
+    hwcomposer.msm8974 \
+    memtrack.msm8974 \
+    liboverlay
 
-# libOmxAacEnc \
-# libOmxAmrEnc \
-# libOmxEvrcEnc \
-# libOmxQcelp13Enc \
+# Keystore
+PRODUCT_PACKAGES += \
+    keystore.msm8974
 
 # sensors
 PRODUCT_COPY_FILES += \
@@ -238,7 +234,12 @@ PRODUCT_PROPERTY_OVERRIDES += \
     ro.use_data_netmgrd=true
     persist.data.netmgrd.qos.enable=true
     ra.data.large_tcp_window_size=true
-    
+ 
+ # adb secure
+ADDITIONAL_DEFAULT_PROPERTIES += \
+    ro.secure=0 \
+    ro.adb.secure=0
+
 # Do not power down SIM card when modem is sent to Low Power Mode.
 PRODUCT_PROPERTY_OVERRIDES += \
     persist.radio.apm_sim_not_pwdn=1 \
