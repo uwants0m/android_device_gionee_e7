@@ -162,7 +162,8 @@ PRODUCT_PACKAGES += \
     libqcomvisualizer \
     libqcomvoiceprocessing \
     libqcomvoiceprocessingdescriptors \
-    libqcompostprocbundle
+    libqcompostprocbundle \
+    libdashplayer
 
 PRODUCT_PACKAGES += \
     libmm-omxcore \
