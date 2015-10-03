@@ -25,7 +25,7 @@ import android.preference.PreferenceManager;
 
 public class DoubleTapSwitch implements OnPreferenceChangeListener {
 
-    private static final String FILE = "/sys/device/platform/tp_wake_switch";
+    private static final String FILE = "/sys/device/platform/tp_wake_switch/double_wake";
 
     public static boolean isSupported() {
         return Utils.fileWritable(FILE);
