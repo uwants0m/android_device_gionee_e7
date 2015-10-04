@@ -28,7 +28,7 @@ TARGET_BOARD_PLATFORM := msm8974
 TARGET_BOARD_PLATFORM_GPU := qcom-adreno330
 
 BOARD_KERNEL_SEPARATED_DT := true
-BOARD_KERNEL_CMDLINE := console=ttyHSL0,115200,n8 androidboot.selinux=disabled androidboot.hardware=qcom user_debug=22 msm_rtb.filter=0x37 ehci-hcd.park=3
+BOARD_KERNEL_CMDLINE := console=ttyHSL0,115200,n8 androidboot.selinux=disabled androidboot.hardware=qcom user_debug=31 msm_rtb.filter=0x37 ehci-hcd.park=3
 BOARD_KERNEL_BASE := 0x00000000
 BOARD_KERNEL_PAGESIZE := 2048
 BOARD_CUSTOM_BOOTIMG_MK := device/gionee/e7/mkbootimg.mk
@@ -98,8 +98,6 @@ BOARD_FLASH_BLOCK_SIZE := 131072
 
 TARGET_RECOVERY_FSTAB := device/gionee/e7/rootdir/fstab.qcom
 
-BOARD_CHARGER_ENABLE_SUSPEND := true
-
 TARGET_RELEASETOOLS_EXTENSIONS := device/gionee/e7
 
 # inherit from the proprietary version
@@ -108,8 +106,10 @@ TARGET_RELEASETOOLS_EXTENSIONS := device/gionee/e7
 # Include an expanded selection of fonts
 EXTENDED_FONT_FOOTPRINT := true
 
-# Healthd
-HEALTHD_ENABLE_TRICOLOR_LED := true
+# charger
+BOARD_CHARGER_DISABLE_INIT_BLANK := true
+HEALTHD_FORCE_BACKLIGHT_CONTROL := true
+HEALTHD_BACKLIGHT_ON_LEVEL := 125
 
 # power hal
 TARGET_PROVIDES_POWERHAL := true
