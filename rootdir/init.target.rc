@@ -80,9 +80,9 @@ service qrngp /system/bin/qrngp
 on property:sys.boot_completed=1
     start qrngp
 
-service mpdecision /system/bin/mpdecision --avg_comp
-   user root
-   disabled
+#service mpdecision /system/bin/mpdecision --avg_comp
+#   user root
+#   disabled
 
 service qosmgrd /system/bin/qosmgr /system/etc/qosmgr_rules.xml
    user system
