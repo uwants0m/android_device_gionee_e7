@@ -200,6 +200,10 @@ PRODUCT_COPY_FILES += \
 PRODUCT_PACKAGES += \
     com.android.future.usb.accessory
 
+#Default USB mount
+PRODUCT_DEFAULT_PROPERTY_OVERRIDES += \
+    persist.sys.usb.config=mtp
+
 # for off charging mode
 PRODUCT_PACKAGES += \
     charger_res_images
