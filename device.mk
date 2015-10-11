@@ -129,7 +129,8 @@ PRODUCT_PACKAGES += \
     memtrack.msm8974 \
     lights.e7 \
     camera-wrapper.msm8974 \
-    keystore.msm8974
+    keystore.msm8974 \
+    power.msm8974
 
 #Audio
 PRODUCT_PACKAGES += \
@@ -162,8 +163,7 @@ PRODUCT_PACKAGES += \
     libqcomvisualizer \
     libqcomvoiceprocessing \
     libqcomvoiceprocessingdescriptors \
-    libqcompostprocbundle \
-    libdashplayer
+    libqcompostprocbundle
 
 PRODUCT_PACKAGES += \
     libmm-omxcore \
