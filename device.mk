@@ -87,8 +87,6 @@ PRODUCT_COPY_FILES += \
     device/gionee/e7/wifi/p2p_supplicant_overlay.conf:system/etc/wifi/p2p_supplicant_overlay.conf \
     device/gionee/e7/wifi/wpa_supplicant_overlay.conf:system/etc/wifi/wpa_supplicant_overlay.conf \
 
-PRODUCT_TAGS += dalvik.gc.type-precise
-
 DEVICE_PACKAGE_OVERLAYS := \
     device/gionee/e7/overlay
 
@@ -99,6 +97,10 @@ PRODUCT_PACKAGES := \
     wcnss_service \
     wpa_supplicant \
     wpa_supplicant.conf
+
+# http://b/15193147
+# TODO(danalbert): Remove this once stlport is dead and gone.
+PRODUCT_PACKAGES +=  libstlport
 
 # Live Wallpapers
 PRODUCT_PACKAGES += \
