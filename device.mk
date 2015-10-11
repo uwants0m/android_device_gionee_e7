@@ -98,10 +98,6 @@ PRODUCT_PACKAGES := \
     wpa_supplicant \
     wpa_supplicant.conf
 
-# http://b/15193147
-# TODO(danalbert): Remove this once stlport is dead and gone.
-PRODUCT_PACKAGES +=  libstlport
-
 # Live Wallpapers
 PRODUCT_PACKAGES += \
     LiveWallpapers \
