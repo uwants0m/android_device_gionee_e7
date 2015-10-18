@@ -171,7 +171,11 @@ PRODUCT_PACKAGES += \
     libOmxVenc \
     libOmxCore \
     libstagefrighthw \
-    libc2dcolorconvert
+    libc2dcolorconvert \
+    libdashplayer \
+    qcmediaplayer
+    
+    PRODUCT_BOOT_JARS += qcmediaplayer
 
 # libOmxAacEnc \
 # libOmxAmrEnc \
