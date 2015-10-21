@@ -170,11 +170,7 @@ PRODUCT_PACKAGES += \
     libOmxVenc \
     libOmxCore \
     libstagefrighthw \
-    libc2dcolorconvert \
-    libdashplayer \
-    qcmediaplayer
-    
-    PRODUCT_BOOT_JARS += qcmediaplayer
+    libc2dcolorconvert
 
 # libOmxAacEnc \
 # libOmxAmrEnc \
@@ -227,21 +223,13 @@ PRODUCT_PROPERTY_OVERRIDES += \
 # Ril
 PRODUCT_PROPERTY_OVERRIDES += \
     rild.libpath=/system/vendor/lib/libril-qc-qmi-1.so \
-    rild.libargs=-d /dev/smd0 \
     telephony.lteOnGSMDevice=1 \
     ro.nfc.port=I2C \
-    persist.radio.add_power_save=1 \
     ro.qualcomm.cabl=1 \
     hw.cabl.level=Auto \
-    ril.subscription.types=NV,RUIM
-    ro.use_data_netmgrd=true
-    persist.data.netmgrd.qos.enable=true
+    ro.use_data_netmgrd=true \
+    persist.data.netmgrd.qos.enable=true \
     ra.data.large_tcp_window_size=true
-    
-# Do not power down SIM card when modem is sent to Low Power Mode.
-PRODUCT_PROPERTY_OVERRIDES += \
-    persist.radio.apm_sim_not_pwdn=1 \
-    persist.radio.eons.enabled=false
 
 # Cell Broadcasts
 PRODUCT_PROPERTY_OVERRIDES += \
