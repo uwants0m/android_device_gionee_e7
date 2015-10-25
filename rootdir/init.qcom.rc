@@ -234,7 +234,15 @@ on boot
     
     # cpuquiet
     chown system system /sys/devices/system/cpu/cpuquiet/cpuquiet_driver/max_cpus
-    
+ 
+    # kernel thermal config
+    write /sys/module/msm_thermal/core_control/enabled 1
+    write /sys/module/msm_thermal/core_control/limit_temp 80
+    write /sys/module/msm_thermal/freq_control/limit_temp 70
+    write /sys/module/msm_thermal/freq_control/poll_ms 500
+    write /sys/module/msm_thermal/freq_control/freq_step 1
+    write /sys/module/msm_thermal/parameters/enabled 1
+
 # msm specific files that need to be created on /data
 on post-fs-data
     # Create the directories used by the Wireless subsystem
