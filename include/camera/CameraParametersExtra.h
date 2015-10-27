@@ -14,8 +14,10 @@
  * limitations under the License.
  */
 
-#define CAMERA_PARAMETERS_EXTRA_C \
-const char CameraParameters::KEY_TRACK_AREAS[] = "track-areas";
-
-#define CAMERA_PARAMETERS_EXTRA_H \
-    static const char KEY_TRACK_AREAS[];
+ #define CAMERA_PARAMETERS_EXTRA_C \
+const char CameraParameters::SCENE_MODE_GESTURE[] = "gesture"; \
+const char CameraParameters::SCENE_MODE_FOOD[] = "food";
+ 
+ #define CAMERA_PARAMETERS_EXTRA_H \
+    static const char SCENE_MODE_GESTURE[]; \
+    static const char SCENE_MODE_FOOD[];
