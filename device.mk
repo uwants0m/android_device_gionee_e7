@@ -80,7 +80,8 @@ PRODUCT_COPY_FILES += \
     frameworks/native/data/etc/android.hardware.ethernet.xml:system/etc/permissions/android.hardware.ethernet.xml
 
 PRODUCT_COPY_FILES += \
-    device/gionee/e7/thermal-engine-8974.conf:system/etc/thermal-engine-8974.conf
+    device/gionee/e7/thermal-engine-8974.conf:system/etc/thermal-engine-8974.conf \
+    device/gionee/e7/rootdir/etc/power_profiles.xml:system/etc/power_profiles.xml
 
 # Wifi config
 PRODUCT_COPY_FILES += \
