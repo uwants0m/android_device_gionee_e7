@@ -172,12 +172,14 @@ PRODUCT_PACKAGES += \
     libOmxVenc \
     libOmxCore \
     libstagefrighthw \
+    libqdutils \
+    libqdMetaData \
     libc2dcolorconvert
 
-# libOmxAacEnc \
-# libOmxAmrEnc \
-# libOmxEvrcEnc \
-# libOmxQcelp13Enc \
+    # libOmxAacEnc \
+    # libOmxAmrEnc \
+    # libOmxEvrcEnc \
+    # libOmxQcelp13Enc \
 
 # sensors
 PRODUCT_COPY_FILES += \
