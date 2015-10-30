@@ -174,12 +174,11 @@ PRODUCT_PACKAGES += \
     libstagefrighthw \
     libqdutils \
     libqdMetaData \
-    libc2dcolorconvert
-
-    # libOmxAacEnc \
-    # libOmxAmrEnc \
-    # libOmxEvrcEnc \
-    # libOmxQcelp13Enc \
+    libc2dcolorconvert \
+    libOmxAacEnc \
+    libOmxAmrEnc \
+    libOmxEvrcEnc \
+    libOmxQcelp13Enc
 
 # sensors
 PRODUCT_COPY_FILES += \
