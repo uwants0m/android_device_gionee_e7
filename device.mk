@@ -178,7 +178,8 @@ PRODUCT_PACKAGES += \
     libOmxAacEnc \
     libOmxAmrEnc \
     libOmxEvrcEnc \
-    libOmxQcelp13Enc
+    libOmxQcelp13Enc \
+    libdashplayer \
 
 # sensors
 PRODUCT_COPY_FILES += \
