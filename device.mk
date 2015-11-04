@@ -169,6 +169,7 @@ PRODUCT_PACKAGES += \
     libmm-omxcore \
     libdivxdrmdecrypt \
     libOmxVdec \
+    libOmxVdecHevc \
     libOmxVenc \
     libOmxCore \
     libstagefrighthw \
@@ -179,7 +180,10 @@ PRODUCT_PACKAGES += \
     libOmxAmrEnc \
     libOmxEvrcEnc \
     libOmxQcelp13Enc \
-    libdashplayer
+    libdashplayer \
+    qcmediaplayer
+    
+PRODUCT_BOOT_JARS += qcmediaplayer
 
 # sensors
 PRODUCT_COPY_FILES += \
