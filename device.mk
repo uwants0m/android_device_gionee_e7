@@ -218,7 +218,8 @@ PRODUCT_PROPERTY_OVERRIDES += \
 # Graphics
 PRODUCT_PROPERTY_OVERRIDES += \
     ro.opengles.version=196608 \
-    persist.hwc.mdpcomp.enable=true
+    persist.hwc.mdpcomp.enable=true \
+    mm.enable.qcom_parser=37491
 
 # Ril sends only one RIL_UNSOL_CALL_RING, so set call_ring.multiple to false
 PRODUCT_PROPERTY_OVERRIDES += \
@@ -232,6 +233,7 @@ PRODUCT_PROPERTY_OVERRIDES += \
     ro.qualcomm.cabl=1 \
     hw.cabl.level=Auto \
     ro.use_data_netmgrd=true \
+    persist.fuse_sdcard=true \
     persist.data.netmgrd.qos.enable=true \
     ra.data.large_tcp_window_size=true
 
@@ -240,7 +242,7 @@ PRODUCT_PROPERTY_OVERRIDES += \
     ro.cellbroadcast.emergencyids=0-65534
 
 PRODUCT_PROPERTY_OVERRIDES += \
-    ro.telephony.default_network=9
+    ro.telephony.default_network=0
 
 PRODUCT_PROPERTY_OVERRIDES += \
     drm.service.enabled=true
