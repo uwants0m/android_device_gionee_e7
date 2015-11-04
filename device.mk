@@ -234,6 +234,7 @@ PRODUCT_PROPERTY_OVERRIDES += \
     hw.cabl.level=Auto \
     ro.use_data_netmgrd=true \
     persist.fuse_sdcard=true \
+    persist.cne.feature=1 \
     persist.data.netmgrd.qos.enable=true \
     ra.data.large_tcp_window_size=true
 
