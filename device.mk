@@ -169,21 +169,15 @@ PRODUCT_PACKAGES += \
     libmm-omxcore \
     libdivxdrmdecrypt \
     libOmxVdec \
-    libOmxVdecHevc \
     libOmxVenc \
     libOmxCore \
     libstagefrighthw \
-    libqdutils \
-    libqdMetaData \
-    libc2dcolorconvert \
-    libOmxAacEnc \
-    libOmxAmrEnc \
-    libOmxEvrcEnc \
-    libOmxQcelp13Enc \
-    libdashplayer \
-    qcmediaplayer
-    
-PRODUCT_BOOT_JARS += qcmediaplayer
+    libc2dcolorconvert
+
+#    libOmxAacEnc \
+#    libOmxAmrEnc \
+#    libOmxEvrcEnc \
+#    libOmxQcelp13Enc \
 
 # sensors
 PRODUCT_COPY_FILES += \
@@ -272,7 +266,7 @@ PRODUCT_PROPERTY_OVERRIDES += \
 
 # Audio Configuration
 PRODUCT_PROPERTY_OVERRIDES += \
-    ro.qc.sdk.audio.audience=true \
+    ro.qc.sdk.audio.fluencetype=fluence \
     persist.audio.fluence.voicecall=true \
     af.resampler.quality=4 \
     audio.offload.buffer.size.kb=32 \
