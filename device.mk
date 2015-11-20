@@ -18,6 +18,9 @@ PRODUCT_COPY_FILES += \
     device/gionee/e7/rootdir/init.qcom.usb.rc:recovery/root/init.usb.rc \
     device/gionee/e7/rootdir/twrp.fstab:recovery/root/etc/twrp.fstab 
 
+$(call inherit-product, frameworks/native-caf/build/phone-xxxhdpi-3072-dalvik-heap.mk)
+$(call inherit-product, frameworks/native-caf/build/phone-xxxhdpi-3072-hwui-memory.mk)
+
 # E7 Init files
 PRODUCT_COPY_FILES += \
     device/gionee/e7/rootdir/init.qcom.rc:root/init.qcom.rc \
