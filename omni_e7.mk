@@ -32,6 +32,9 @@ $(call inherit-product, vendor/omni/config/common.mk)
 # Inherit from hardware-specific part of the product configuration
 $(call inherit-product, device/gionee/e7/device.mk)
 
+# no DSPManager for us
+TARGET_NO_DSPMANAGER := true
+
 PRODUCT_NAME := omni_e7
 PRODUCT_DEVICE := e7
 PRODUCT_BRAND := gm
