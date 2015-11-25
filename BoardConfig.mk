@@ -129,10 +129,10 @@ HEALTHD_FORCE_BACKLIGHT_CONTROL := true
 HEALTHD_BACKLIGHT_ON_LEVEL := 125
 
 # power hal
-TARGET_PROVIDES_POWERHAL := true
+#TARGET_PROVIDES_POWERHAL := true
 
 # keymaster
-TARGET_KEYMASTER_WAIT_FOR_QSEE := true
+#TARGET_KEYMASTER_WAIT_FOR_QSEE := true
 
 # selinux
 #include device/qcom/sepolicy/sepolicy.mk
