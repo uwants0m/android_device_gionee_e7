@@ -234,7 +234,7 @@ PRODUCT_PROPERTY_OVERRIDES += \
     persist.radio.add_power_save=1 \
     ro.qualcomm.cabl=1 \
     hw.cabl.level=Auto \
-    ril.subscription.types=NV,RUIM
+    ril.subscription.types=RUIM
     ro.use_data_netmgrd=true
     persist.data.netmgrd.qos.enable=true
     ra.data.large_tcp_window_size=true
@@ -291,7 +291,8 @@ PRODUCT_PROPERTY_OVERRIDES += \
 
 PRODUCT_PROPERTY_OVERRIDES += \
     ro.build.selinux=1 \
-    ro.sf.lcd_density=480
+    ro.sf.lcd_density=480 \
+    persist.fuse_sdcard=true
 
 $(call inherit-product, frameworks/native/build/phone-xxxhdpi-3072-dalvik-heap.mk)
 $(call inherit-product, frameworks/native/build/phone-xxxhdpi-3072-hwui-memory.mk)
