@@ -132,7 +132,7 @@ HEALTHD_BACKLIGHT_ON_LEVEL := 125
 TARGET_PROVIDES_POWERHAL := true
 
 # keymaster
-#TARGET_KEYMASTER_WAIT_FOR_QSEE := true
+TARGET_KEYMASTER_WAIT_FOR_QSEE := true
 
 # selinux
 #include device/qcom/sepolicy/sepolicy.mk
