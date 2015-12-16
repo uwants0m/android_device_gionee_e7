@@ -992,8 +992,6 @@
 
     <path name="voice-speaker">
         <path name="speaker" />
-        <ctl name="RX3 Digital Volume" value="86" />
-        <ctl name="RX4 Digital Volume" value="86" />
     </path>
 
     <!-- Gionee Huangzhuolin 20141217 @ add for CR01423706 begin -->
