@@ -128,7 +128,6 @@ PRODUCT_PACKAGES += \
     copybit.msm8974 \
     memtrack.msm8974 \
     lights.e7 \
-    camera.msm8974 \
     keystore.msm8974 \
     power.msm8974
 
