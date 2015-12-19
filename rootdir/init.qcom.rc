@@ -326,7 +326,6 @@ on post-fs-data
 #Double tap 2 wake
     chown root system sys/devices/platform/tp_wake_switch/double_wake
     chmod 0664 sys/devices/platform/tp_wake_switch/double_wake
-    write sys/devices/platform/tp_wake_switch/double_wake 1
 
 # camera sockets
     mkdir /data/misc/camera 0770 camera camera
