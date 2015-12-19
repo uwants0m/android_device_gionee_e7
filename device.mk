@@ -158,9 +158,11 @@ PRODUCT_PACKAGES += \
     libtinyxml2
 
 # Camera
+PRODUCT_PACKAGES += \
     libcamera_client \
     libcamera_metadata \
     libcameraservice
+    
 # Audio effects
 PRODUCT_PACKAGES += \
     libqcomvisualizer \
