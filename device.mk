@@ -128,7 +128,6 @@ PRODUCT_PACKAGES += \
     copybit.msm8974 \
     memtrack.msm8974 \
     lights.msm8974 \
-    camera-wrapper.msm8974 \
     keystore.msm8974 \
     power.msm8974
 
@@ -158,6 +157,10 @@ PRODUCT_PACKAGES += \
     libtinyxml \
     libtinyxml2
 
+# Camera
+    libcamera_client \
+    libcamera_metadata \
+    libcameraservice
 # Audio effects
 PRODUCT_PACKAGES += \
     libqcomvisualizer \
