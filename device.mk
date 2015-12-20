@@ -240,7 +240,8 @@ PRODUCT_PROPERTY_OVERRIDES += \
     ro.cellbroadcast.emergencyids=0-65534
 
 PRODUCT_PROPERTY_OVERRIDES += \
-    ro.telephony.default_network=0
+    ro.telephony.default_network=0 \
+    persist.radio.rat_on=combine
 
 PRODUCT_PROPERTY_OVERRIDES += \
     drm.service.enabled=true
