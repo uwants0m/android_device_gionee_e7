@@ -37,7 +37,7 @@ PRODUCT_DEVICE := e7
 PRODUCT_BRAND := General Mobile
 PRODUCT_MODEL := Elite
 PRODUCT_LOCALES += xxhdpi xhdpi hdpi
-PRODUCT_MANUFACTURER := gm
+PRODUCT_MANUFACTURER := General Mobile
 
 # Kernel
 TARGET_KERNEL_SOURCE := kernel/gm/e7
