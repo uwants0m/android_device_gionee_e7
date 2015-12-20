@@ -25,7 +25,7 @@ import android.preference.PreferenceManager;
 
 public class DoubleTapSwitch implements OnPreferenceChangeListener {
 
-    private static final String FILE = "/sys/bus/i2c/devices/1-004a/tsp";
+    private static final String FILE = "/sys/devices/platform/tp_wake_switch/double_wake";
 
     public static boolean isSupported() {
         return Utils.fileWritable(FILE);
@@ -48,18 +48,18 @@ public class DoubleTapSwitch implements OnPreferenceChangeListener {
 
         boolean enabled = isEnabled(context);
         if(enabled)
-            Utils.writeValue(FILE, "AUTO");
+            Utils.writeValue(FILE, "1");
         else
-            Utils.writeValue(FILE, "OFF");
+            Utils.writeValue(FILE, "0");
     }
 
     @Override
     public boolean onPreferenceChange(Preference preference, Object newValue) {
         Boolean enabled = (Boolean) newValue;
         if(enabled)
-            Utils.writeValue(FILE, "AUTO");
+            Utils.writeValue(FILE, "1");
         else
-            Utils.writeValue(FILE, "OFF");
+            Utils.writeValue(FILE, "0");
         return true;
     }
 
