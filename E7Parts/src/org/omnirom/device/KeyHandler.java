@@ -33,10 +33,10 @@ public class KeyHandler implements DeviceKeyHandler {
     private static final int GESTURE_REQUEST = 1;
 
     // Supported scancodes
-    private static final int KEY_F17 = 187;
+    private static final int KEY_DOUBLE_TAP = 187;
 
     private static final int[] sSupportedGestures = new int[]{
-        KEY_F17
+        KEY_DOUBLE_TAP
     };
 
     private final Context mContext;
@@ -65,8 +65,8 @@ public class KeyHandler implements DeviceKeyHandler {
         if (DEBUG) Log.i(TAG, "scanCode=" + event.getScanCode());
         boolean isKeySupported = ArrayUtils.contains(sSupportedGestures, event.getScanCode());
         if (isKeySupported ) {
-            if (event.getScanCode() == KEY_F17 && !mPowerManager.isScreenOn()) {
-                if (DEBUG) Log.i(TAG, "KEY_F17");
+            if (event.getScanCode() == KEY_DOUBLE_TAP && !mPowerManager.isScreenOn()) {
+                if (DEBUG) Log.i(TAG, "KEY_DOUBLE_TAP");
                 mPowerManager.wakeUp(SystemClock.uptimeMillis());
                 return true;
             }
