@@ -156,12 +156,6 @@ PRODUCT_PACKAGES += \
     tinypcminfo \
     libtinyxml \
     libtinyxml2
-
-# Camera
-PRODUCT_PACKAGES += \
-    libcamera_client \
-    libcamera_metadata \
-    libcameraservice
     
 # Audio effects
 PRODUCT_PACKAGES += \
