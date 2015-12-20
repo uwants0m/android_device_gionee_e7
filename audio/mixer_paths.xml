@@ -981,7 +981,7 @@
         <ctl name="IIR1 INP1 Volume" value="62" />
         <ctl name="RX1 MIX2 INP1" value="IIR1" />
         <ctl name="CLASS_H_DSM MUX" value="DSM_HPHL_RX1" />
-        <ctl name="RX1 Digital Volume" value="84" />
+        <ctl name="RX1 Digital Volume" value="92" />
         <ctl name="DAC1 Switch" value="1" />
     </path>
     <!-- Gionee Huangzhuolin 20141210 @ add for CR01423706 end -->
