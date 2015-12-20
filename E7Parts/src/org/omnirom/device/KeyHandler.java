@@ -47,7 +47,7 @@ public class KeyHandler implements DeviceKeyHandler {
     public KeyHandler(Context context) {
         mContext = context;
         mPowerManager = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
-        mGestureWakeLock = mPowerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK,
+        mGestureWakeLock = mPowerManager.newWakeLock(PowerManager.FULL_WAKE_LOCK,
                 "GestureWakeLock");
     }
 
