@@ -35,7 +35,7 @@ $(call inherit-product, device/gionee/e7/device.mk)
 PRODUCT_NAME := omni_e7
 PRODUCT_DEVICE := e7
 PRODUCT_BRAND := General Mobile
-PRODUCT_MODEL := Elite
+PRODUCT_MODEL := Discovery Elite
 PRODUCT_LOCALES += xxhdpi xhdpi hdpi
 PRODUCT_MANUFACTURER := General Mobile
 
