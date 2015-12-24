@@ -130,6 +130,7 @@ PRODUCT_PACKAGES += \
     hwcomposer.msm8974 \
     gralloc.msm8974 \
     copybit.msm8974 \
+    camera.msm8974 \
     memtrack.msm8974 \
     lights.msm8974 \
     keystore.msm8974 \
