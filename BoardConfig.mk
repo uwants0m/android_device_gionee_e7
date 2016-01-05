@@ -135,9 +135,9 @@ TARGET_PROVIDES_POWERHAL := true
 TARGET_KEYMASTER_WAIT_FOR_QSEE := true
 
 # selinux
-#include device/qcom/sepolicy/sepolicy.mk
+include device/qcom/sepolicy/sepolicy.mk
 
-#BOARD_SEPOLICY_DIRS += \
+BOARD_SEPOLICY_DIRS += \
     device/gionee/e7/sepolicy
     
 #TWRP
