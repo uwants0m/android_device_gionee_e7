@@ -43,6 +43,12 @@
   },
   {
     "remote": "omnirom",
+    "repository": "android_external_stlport",
+    "target_path": "external/stlport",
+    "revision": "android-6.0"
+  },
+  {
+    "remote": "omnirom",
     "repository": "android_hardware_ril",
     "target_path": "hardware/ril-caf",
     "revision": "android-6.0-caf"
