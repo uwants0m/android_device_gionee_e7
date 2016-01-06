@@ -185,7 +185,6 @@ static char *camera_fixup_setparams(int id, const char *settings)
         // preview size same as video-size
         params.set("preview-size", video_size);
     }
-    params.set("oppo-app", "1");
 
 #ifdef LOG_PARAMETERS
     ALOGI("%s: fixed parameters:", __FUNCTION__);
