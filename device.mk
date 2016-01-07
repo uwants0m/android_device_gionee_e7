@@ -292,7 +292,8 @@ PRODUCT_PROPERTY_OVERRIDES += \
 PRODUCT_PROPERTY_OVERRIDES += \
     ro.build.selinux=1 \
     ro.sf.lcd_density=480 \
-    persist.fuse_sdcard=true
+    persist.fuse_sdcard=true \
+    ro.vold.primary_physical=1
 
 $(call inherit-product, frameworks/native/build/phone-xxxhdpi-3072-dalvik-heap.mk)
 $(call inherit-product, frameworks/native/build/phone-xxxhdpi-3072-hwui-memory.mk)
