@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015, The Android Open Source Project
+ * Copyright (C) 2014, The CyanogenMod Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,7 +21,8 @@
 *
 */
 
-#define LOG_NDEBUG 0
+//#define LOG_NDEBUG 0
+//#define LOG_PARAMETERS 1
 
 #define LOG_TAG "CameraWrapper"
 #include <cutils/log.h>
@@ -54,7 +55,7 @@ camera_module_t HAL_MODULE_INFO_SYM = {
          .hal_api_version = HARDWARE_HAL_API_VERSION,
          .id = CAMERA_HARDWARE_MODULE_ID,
          .name = "E7 Camera Wrapper",
-         .author = "The Android Open Source Project",
+         .author = "The CyanogenMod Project",
          .methods = &camera_module_methods,
          .dso = NULL, /* remove compilation warnings */
          .reserved = {0}, /* remove compilation warnings */
@@ -95,19 +96,45 @@ static int check_vendor_module()
     return rv;
 }
 
-static char *camera_fixup_getparams(int id __attribute__((unused)),
-        const char *settings)
+static const char *KEY_EXPOSURE_TIME = "exposure-time";
+static const char *KEY_EXPOSURE_TIME_VALUES = "exposure-time-values";
+
+static char *camera_fixup_getparams(int id, const char *settings)
 {
+    bool videoMode = false;
+    const char *exposureTimeValues = "0,1,500000,1000000,2000000,4000000,8000000,16000000,32000000,64000000";
+    const char *supportedSceneModes = "auto,asd,landscape,snow,beach,sunset,night,portrait,backlight,sports,steadyphoto,flowers,candlelight,fireworks,party,night-portrait,theatre,gesture,food,getstr,action,AR";
+
     android::CameraParameters params;
     params.unflatten(android::String8(settings));
 
-#if !LOG_NDEBUG
-    ALOGV("%s: Original parameters:", __FUNCTION__);
+#ifdef LOG_PARAMETERS
+    ALOGV("%s: original parameters:", __FUNCTION__);
     params.dump();
 #endif
 
-#if !LOG_NDEBUG
-    ALOGV("%s: Fixed parameters:", __FUNCTION__);
+    if (params.get(android::CameraParameters::KEY_RECORDING_HINT)) {
+        videoMode = (!strcmp(params.get(
+                android::CameraParameters::KEY_RECORDING_HINT), "true"));
+    }
+
+    if (!videoMode) {
+        /* Back camera */
+        if (id == 0) {
+            /* Set supported exposure time values */
+            params.set(KEY_EXPOSURE_TIME_VALUES, exposureTimeValues);
+        }
+
+        /* Front camera */
+        if (id == 1) {
+            /* Remove HDR scene mode */
+            params.set(android::CameraParameters::KEY_SUPPORTED_SCENE_MODES,
+                    supportedSceneModes);
+        }
+    }
+
+#ifdef LOG_PARAMETERS
+    ALOGI("%s: fixed parameters:", __FUNCTION__);
     params.dump();
 #endif
 
@@ -119,18 +146,49 @@ static char *camera_fixup_getparams(int id __attribute__((unused)),
 
 static char *camera_fixup_setparams(int id, const char *settings)
 {
+    bool videoMode = false;
+    bool slowShutterMode = false;
+
     android::CameraParameters params;
     params.unflatten(android::String8(settings));
 
-#if !LOG_NDEBUG
+#ifdef LOG_PARAMETERS
     ALOGV("%s: original parameters:", __FUNCTION__);
     params.dump();
 #endif
 
-    params.set(android::CameraParameters::KEY_VIDEO_STABILIZATION, "false");
+    if (params.get(android::CameraParameters::KEY_RECORDING_HINT)) {
+        videoMode = (!strcmp(params.get(
+                android::CameraParameters::KEY_RECORDING_HINT), "true"));
+    }
 
-#if !LOG_NDEBUG
-    ALOGV("%s: fixed parameters:", __FUNCTION__);
+    if (params.get(KEY_EXPOSURE_TIME)) {
+        slowShutterMode = (strcmp(params.get(KEY_EXPOSURE_TIME), "0"));
+    }
+
+    /* Disable flash if slow shutter is enabled */
+    if (!videoMode) {
+        if (id == 0) {
+            if (slowShutterMode) {
+                params.set(android::CameraParameters::KEY_FLASH_MODE,
+                        android::CameraParameters::FLASH_MODE_OFF);
+            }
+        }
+    } else {
+        const char *video_size = params.get(android::CameraParameters::KEY_VIDEO_SIZE);
+        // force nv12-venus for 4k resolutios
+        // preview-format: nv12-venus for 4096x2160,3840x2160
+        if (!strcmp(video_size, "4096x2160") ||
+                !strcmp(video_size, "3840x2160")) {
+            params.set("preview-format", "nv12-venus");
+        }
+        // preview size same as video-size
+        params.set("preview-size", video_size);
+    }
+    params.set("oppo-app", "1");
+
+#ifdef LOG_PARAMETERS
+    ALOGI("%s: fixed parameters:", __FUNCTION__);
     params.dump();
 #endif
 
@@ -532,7 +590,7 @@ static int camera_device_open(const hw_module_t *module, const char *name,
         memset(camera_ops, 0, sizeof(*camera_ops));
 
         camera_device->base.common.tag = HARDWARE_DEVICE_TAG;
-        camera_device->base.common.version = CAMERA_DEVICE_API_VERSION_1_0;
+        camera_device->base.common.version = HARDWARE_DEVICE_API_VERSION(1, 0);
         camera_device->base.common.module = (hw_module_t *)(module);
         camera_device->base.common.close = camera_device_close;
         camera_device->base.ops = camera_ops;
