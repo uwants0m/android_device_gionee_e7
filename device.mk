@@ -290,7 +290,8 @@ PRODUCT_PROPERTY_OVERRIDES += \
     persist.gps.qmienabled=true
 
 PRODUCT_PROPERTY_OVERRIDES += \
-    ro.build.selinux=1 \
+    ro.build.selinux=0 \
+    ro.boot.selinux=0 \
     ro.sf.lcd_density=480 \
     persist.fuse_sdcard=true \
     ro.vold.primary_physical=1
