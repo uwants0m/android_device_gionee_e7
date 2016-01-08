@@ -73,11 +73,7 @@ on early-boot
     exec /system/bin/sh /init.qcom.early_boot.sh ${ro.board.platform}
     exec /system/bin/sh /init.qcom.syspart_fixup.sh ${ro.board.platform} ${ro.serialno}
     
-on boot
-    #Nv dump stuff - probably needed for BT MAC address.
-    #hci_qcomm_init does want to look here
-    mkdir /data/opponvitems  0771 radio radio
-    
+on boot    
     chown bluetooth bluetooth /sys/module/bluetooth_power/parameters/power
     chown bluetooth bluetooth /sys/class/rfkill/rfkill0/type
     chown bluetooth bluetooth /sys/class/rfkill/rfkill0/state
@@ -527,10 +523,10 @@ service usf-post-boot /system/bin/sh /system/etc/usf_post_boot.sh
 #    group system wifi
 #    oneshot
 
-service wcnss-service /system/bin/wcnss_service
-   class late_start
+service wcnss-service /system/bin/logwrapper /system/bin/wcnss_service
+   class main
    user system
-   group system wifi
+   group system wifi qcom_diag radio
    oneshot
    
 service wpa_supplicant /system/bin/wpa_supplicant \
