@@ -1,4 +1,4 @@
-ifneq ($(filter e7,$(TARGET_DEVICE)),)
+ifneq ($(filter u2,$(TARGET_DEVICE)),)
     include $(all-subdir-makefiles)
 
 # Symlink firmware from /persist
