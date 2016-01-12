@@ -33,11 +33,11 @@ $(call inherit-product, vendor/omni/config/common.mk)
 $(call inherit-product, device/gionee/e7/device.mk)
 
 PRODUCT_NAME := omni_e7
-PRODUCT_DEVICE := e7
-PRODUCT_BRAND := GeneralMobile
-PRODUCT_MODEL := DiscoveryElite
+PRODUCT_DEVICE := u2
+PRODUCT_BRAND := IUNI
+PRODUCT_MODEL := U810
 PRODUCT_LOCALES += xxhdpi xhdpi hdpi
-PRODUCT_MANUFACTURER := GeneralMobile
+PRODUCT_MANUFACTURER := IUNI
 
 # Kernel
 TARGET_KERNEL_SOURCE := kernel/gm/e7
