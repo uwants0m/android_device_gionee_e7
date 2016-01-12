@@ -32,7 +32,7 @@ $(call inherit-product, vendor/omni/config/common.mk)
 # Inherit from hardware-specific part of the product configuration
 $(call inherit-product, device/gionee/e7/device.mk)
 
-PRODUCT_NAME := omni_e7
+PRODUCT_NAME := omni_u2
 PRODUCT_DEVICE := u2
 PRODUCT_BRAND := IUNI
 PRODUCT_MODEL := U810
