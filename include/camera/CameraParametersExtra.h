@@ -16,20 +16,8 @@
  
 #define CAMERA_PARAMETERS_EXTRA_C \
 const char CameraParameters::SCENE_MODE_GESTURE[] = "gesture"; \
-const char CameraParameters::SCENE_MODE_FOOD[] = "food"; \
-\
-int CameraParameters::getStr(const char *key) const { return -1; } \
-\
-/* LAST_LINE OF CAMERA_PARAMETERS_EXTRA_C, every line before this one *MUST* have
- * a backslash \ at the end of the line or else everything will break.
- */
+const char CameraParameters::SCENE_MODE_FOOD[] = "food";
  
 #define CAMERA_PARAMETERS_EXTRA_H \
     static const char SCENE_MODE_GESTURE[]; \
-    static const char SCENE_MODE_FOOD[]; \
-    \
-    int const char getStr(const char *key) const; \
-    \
-    /* LAST_LINE OF CAMERA_PARAMETERS_EXTRA_H, every line before this one *MUST* have
-     * a backslash \ at the end of the line or else everything will break.
-     */
+    static const char SCENE_MODE_FOOD[];
