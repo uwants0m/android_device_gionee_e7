@@ -22,4 +22,4 @@ int CameraParameters::getStr(char const*);
 #define CAMERA_PARAMETERS_EXTRA_H \
     static const char SCENE_MODE_GESTURE[]; \
     static const char SCENE_MODE_FOOD[]; \
-    int getstrgetStr(char const*);
+    int getStr(char const*);
