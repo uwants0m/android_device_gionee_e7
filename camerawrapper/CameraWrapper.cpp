@@ -109,16 +109,9 @@ static char *camera_fixup_getparams(int __attribute__((unused)) id,
     params.dump();
 #endif
 
-    /* Convert to Qualcomm-style max parameters */
-    if (params.get("contrast-max")) {
-        params.set("max-contrast", params.get("contrast-max"));
-    }
-    if (params.get("saturation-max")) {
-        params.set("max-saturation", params.get("saturation-max"));
-    }
-    if (params.get("sharpness-max")) {
-        params.set("max-sharpness", params.get("sharpness-max"));
-    }
+    params.set(android::CameraParameters::SCENE_MODE_GESTURE, "gesture");
+    params.set(android::CameraParameters::SCENE_MODE_FOOD, "food");
+    params.set(android::CameraParameters::getstr, "getstr");
 
     android::String8 strParams = params.flatten();
     char *ret = strdup(strParams.string());
@@ -141,16 +134,9 @@ static char *camera_fixup_setparams(int id, const char *settings)
     params.dump();
 #endif
 
-    /* Convert to Qualcomm-style max/min parameters */
-    if (params.get("max-contrast")) {
-        params.set("contrast-max", params.get("max-contrast"));
-    }
-    if (params.get("max-saturation")) {
-        params.set("saturation-max", params.get("max-saturation"));
-    }
-    if (params.get("max-sharpness")) {
-        params.set("sharpness-max", params.get("max-sharpness"));
-    }
+    params.set(android::CameraParameters::SCENE_MODE_GESTURE, "gesture");
+    params.set(android::CameraParameters::SCENE_MODE_FOOD, "food");
+    params.set(android::CameraParameters::getstr, "getstr");
 
 
     android::String8 strParams = params.flatten();
