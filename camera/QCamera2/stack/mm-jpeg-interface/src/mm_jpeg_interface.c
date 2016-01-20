@@ -1,4 +1,4 @@
-/* Copyright (c) 2012-2013, The Linux Foundation. All rights reserved.
+/* Copyright (c) 2012-2014, The Linux Foundation. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are
@@ -27,12 +27,15 @@
  *
  */
 
+#include <stdlib.h>
 #include <pthread.h>
 #include <errno.h>
 #include <sys/ioctl.h>
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <fcntl.h>
+#include <cutils/properties.h>
+#include <stdlib.h>
 
 #include "mm_jpeg_dbg.h"
 #include "mm_jpeg_interface.h"
@@ -43,6 +46,7 @@ static mm_jpeg_obj* g_jpeg_obj = NULL;
 
 static pthread_mutex_t g_handler_lock = PTHREAD_MUTEX_INITIALIZER;
 static uint16_t g_handler_history_count = 0; /* history count for handler */
+volatile uint32_t gMmJpegIntfLogLevel = 1;
 
 /** mm_jpeg_util_generate_handler:
  *
@@ -156,7 +160,7 @@ static int32_t mm_jpeg_intf_create_session(uint32_t client_hdl,
     return rc;
   }
 
-  rc = mm_jpeg_create_session(g_jpeg_obj, client_hdl, p_params, p_session_id);
+ rc = mm_jpeg_create_session(g_jpeg_obj, client_hdl, p_params, p_session_id);
   pthread_mutex_unlock(&g_intf_lock);
   return rc;
 }
@@ -285,11 +289,31 @@ static int32_t mm_jpeg_intf_close(uint32_t client_hdl)
  *       Open a jpeg client
  *
  **/
-uint32_t jpeg_open(mm_jpeg_ops_t *ops)
+uint32_t jpeg_open(mm_jpeg_ops_t *ops, mm_dimension picture_size)
 {
   int32_t rc = 0;
   uint32_t clnt_hdl = 0;
   mm_jpeg_obj* jpeg_obj = NULL;
+  char prop[PROPERTY_VALUE_MAX];
+  uint32_t globalLogLevel = 0;
+
+  memset(prop, 0x0, sizeof(prop));
+  property_get("persist.camera.hal.debug", prop, "0");
+  int val = atoi(prop);
+  if (0 <= val) {
+      gMmJpegIntfLogLevel = (uint32_t)val;
+  }
+  property_get("persist.camera.global.debug", prop, "0");
+  val = atoi(prop);
+  if (0 <= val) {
+      globalLogLevel = (uint32_t)val;
+  }
+
+  /* Highest log level among hal.logs and global.logs is selected */
+  if (gMmJpegIntfLogLevel < globalLogLevel)
+      gMmJpegIntfLogLevel = globalLogLevel;
+  if (gMmJpegIntfLogLevel < MINIMUM_JPEG_LOG_LEVEL)
+      gMmJpegIntfLogLevel = MINIMUM_JPEG_LOG_LEVEL;
 
   pthread_mutex_lock(&g_intf_lock);
   /* first time open */
@@ -303,6 +327,11 @@ uint32_t jpeg_open(mm_jpeg_ops_t *ops)
 
     /* initialize jpeg obj */
     memset(jpeg_obj, 0, sizeof(mm_jpeg_obj));
+
+    /* used for work buf calculation */
+    jpeg_obj->max_pic_w = picture_size.w;
+    jpeg_obj->max_pic_h = picture_size.h;
+
     rc = mm_jpeg_init(jpeg_obj);
     if(0 != rc) {
       CDBG_ERROR("%s:%d] mm_jpeg_init err = %d", __func__, __LINE__, rc);

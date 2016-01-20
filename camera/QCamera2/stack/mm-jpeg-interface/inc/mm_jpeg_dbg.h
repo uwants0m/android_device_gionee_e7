@@ -30,6 +30,15 @@
 #ifndef __MM_JPEG_DBG_H__
 #define __MM_JPEG_DBG_H__
 
+#define LOG_DEBUG 1
+#define MINIMUM_JPEG_LOG_LEVEL 1
+
+/* Choose debug log level. This will not affect the error logs
+   0: turns off CDBG and CDBG_HIGH logs
+   1: turns-on CDBG_HIGH logs
+   2: turns-on CDBG_HIGH and CDBG logs */
+extern volatile uint32_t gMmJpegIntfLogLevel;
+
 #ifndef LOG_DEBUG
   #ifdef _ANDROID_
     #undef LOG_NIDEBUG
@@ -50,7 +59,7 @@
     #define LOG_NIDEBUG 0
     #define LOG_TAG "mm-jpeg-intf"
     #include <utils/Log.h>
-    #define CDBG(fmt, args...) ALOGE(fmt, ##args)
+    #define CDBG(fmt, args...) ALOGD_IF(gMmJpegIntfLogLevel >= 2, fmt, ##args)
   #else
     #include <stdio.h>
     #define CDBG(fmt, args...) fprintf(stderr, fmt, ##args)
@@ -59,7 +68,7 @@
 #endif
 
 #ifdef _ANDROID_
-  #define CDBG_HIGH(fmt, args...)  ALOGI(fmt, ##args)
+  #define CDBG_HIGH(fmt, args...)   ALOGD_IF(gMmJpegIntfLogLevel >= 1, fmt, ##args)
   #define CDBG_ERROR(fmt, args...)  ALOGE(fmt, ##args)
 #else
   #define CDBG_HIGH(fmt, args...) fprintf(stderr, fmt, ##args)

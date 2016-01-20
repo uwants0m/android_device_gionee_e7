@@ -1,4 +1,4 @@
-/* Copyright (c) 2012-2013, The Linux Foundation. All rights reserved.
+/* Copyright (c) 2012-2014, The Linux Foundation. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are
@@ -31,6 +31,8 @@
 #define MM_JPEG_H_
 
 #include <cam_semaphore.h>
+#include <string.h>
+#include <malloc.h>
 #include "mm_jpeg_interface.h"
 #include "cam_list.h"
 #include "OMX_Types.h"
@@ -38,29 +40,94 @@
 #include "OMX_Core.h"
 #include "OMX_Component.h"
 #include "QOMX_JpegExtensions.h"
+#include "mm_jpeg_ionbuf.h"
 
 #define MM_JPEG_MAX_THREADS 30
 #define MM_JPEG_CIRQ_SIZE 30
 #define MM_JPEG_MAX_SESSION 10
 #define MAX_EXIF_TABLE_ENTRIES 50
-#define ASPECT_TOLERANCE 0.001
+#define MAX_JPEG_SIZE 20000000
+#define MAX_OMX_HANDLES (5)
 
-typedef struct {
-  struct cam_list list;
-  void* data;
-} mm_jpeg_q_node_t;
 
-typedef struct {
-  mm_jpeg_q_node_t head; /* dummy head */
-  uint32_t size;
-  pthread_mutex_t lock;
-} mm_jpeg_queue_t;
-
+/** mm_jpeg_abort_state_t:
+ *  @MM_JPEG_ABORT_NONE: Abort is not issued
+ *  @MM_JPEG_ABORT_INIT: Abort is issued from the client
+ *  @MM_JPEG_ABORT_DONE: Abort is completed
+ *
+ *  State representing the abort state
+ **/
 typedef enum {
-  MM_JPEG_CMD_TYPE_JOB,          /* job cmd */
-  MM_JPEG_CMD_TYPE_EXIT,         /* EXIT cmd for exiting jobMgr thread */
-  MM_JPEG_CMD_TYPE_MAX
-} mm_jpeg_cmd_type_t;
+  MM_JPEG_ABORT_NONE,
+  MM_JPEG_ABORT_INIT,
+  MM_JPEG_ABORT_DONE,
+} mm_jpeg_abort_state_t;
+
+
+/* define max num of supported concurrent jpeg jobs by OMX engine.
+ * Current, only one per time */
+#define NUM_MAX_JPEG_CNCURRENT_JOBS 2
+
+#define JOB_ID_MAGICVAL 0x1
+#define JOB_HIST_MAX 10000
+
+/** DUMP_TO_FILE:
+ *  @filename: file name
+ *  @p_addr: address of the buffer
+ *  @len: buffer length
+ *
+ *  dump the image to the file
+ **/
+#define DUMP_TO_FILE(filename, p_addr, len) ({ \
+  size_t rc = 0; \
+  FILE *fp = fopen(filename, "w+"); \
+  if (fp) { \
+    rc = fwrite(p_addr, 1, len, fp); \
+    CDBG_ERROR("%s:%d] written size %zu", __func__, __LINE__, len); \
+    fclose(fp); \
+  } else { \
+    CDBG_ERROR("%s:%d] open %s failed", __func__, __LINE__, filename); \
+  } \
+})
+
+/** DUMP_TO_FILE2:
+ *  @filename: file name
+ *  @p_addr: address of the buffer
+ *  @len: buffer length
+ *
+ *  dump the image to the file if the memory is non-contiguous
+ **/
+#define DUMP_TO_FILE2(filename, p_addr1, len1, paddr2, len2) ({ \
+  size_t rc = 0; \
+  FILE *fp = fopen(filename, "w+"); \
+  if (fp) { \
+    rc = fwrite(p_addr1, 1, len1, fp); \
+    rc = fwrite(p_addr2, 1, len2, fp); \
+    CDBG_ERROR("%s:%d] written %zu %zu", __func__, __LINE__, len1, len2); \
+    fclose(fp); \
+  } else { \
+    CDBG_ERROR("%s:%d] open %s failed", __func__, __LINE__, filename); \
+  } \
+})
+
+/** MM_JPEG_CHK_ABORT:
+ *  @p: client pointer
+ *  @ret: return value
+ *  @label: label to jump to
+ *
+ *  check the abort failure
+ **/
+#define MM_JPEG_CHK_ABORT(p, ret, label) ({ \
+  if (MM_JPEG_ABORT_INIT == p->abort_state) { \
+    CDBG_ERROR("%s:%d] jpeg abort", __func__, __LINE__); \
+    ret = OMX_ErrorNone; \
+    goto label; \
+  } \
+})
+
+#define GET_CLIENT_IDX(x) ((x) & 0xff)
+#define GET_SESSION_IDX(x) (((x) >> 8) & 0xff)
+#define GET_JOB_IDX(x) (((x) >> 16) & 0xff)
 
 typedef struct {
   union {
@@ -73,12 +140,140 @@ typedef struct {
   pthread_mutex_t lock;
 } mm_jpeg_cirq_t;
 
+/** cirq_reset:
+ *
+ *  Arguments:
+ *    @q: circular queue
+ *
+ *  Return:
+ *       none
+ *
+ *  Description:
+ *       Resets the circular queue
+ *
+ **/
+static inline void cirq_reset(mm_jpeg_cirq_t *q)
+{
+  q->front = 0;
+  q->rear = 0;
+  q->count = 0;
+  pthread_mutex_init(&q->lock, NULL);
+}
+
+/** cirq_empty:
+ *
+ *  Arguments:
+ *    @q: circular queue
+ *
+ *  Return:
+ *       none
+ *
+ *  Description:
+ *       check if the curcular queue is empty
+ *
+ **/
+#define cirq_empty(q) (q->count == 0)
+
+/** cirq_full:
+ *
+ *  Arguments:
+ *    @q: circular queue
+ *
+ *  Return:
+ *       none
+ *
+ *  Description:
+ *       check if the curcular queue is full
+ *
+ **/
+#define cirq_full(q) (q->count == MM_JPEG_CIRQ_SIZE)
+
+/** cirq_enqueue:
+ *
+ *  Arguments:
+ *    @q: circular queue
+ *    @data: data to be inserted
+ *
+ *  Return:
+ *       true/false
+ *
+ *  Description:
+ *       enqueue an element into circular queue
+ *
+ **/
+#define cirq_enqueue(q, type, data) ({ \
+  int rc = 0; \
+  pthread_mutex_lock(&q->lock); \
+  if (cirq_full(q)) { \
+    rc = -1; \
+  } else { \
+    q->type[q->rear] = data; \
+    q->rear = (q->rear + 1) % MM_JPEG_CIRQ_SIZE; \
+    q->count++; \
+  } \
+  pthread_mutex_unlock(&q->lock); \
+  rc; \
+})
+
+/** cirq_dequeue:
+ *
+ *  Arguments:
+ *    @q: circular queue
+ *    @data: data to be popped
+ *
+ *  Return:
+ *       true/false
+ *
+ *  Description:
+ *       dequeue an element from the circular queue
+ *
+ **/
+#define cirq_dequeue(q, type, data) ({ \
+  int rc = 0; \
+  pthread_mutex_lock(&q->lock); \
+  if (cirq_empty(q)) { \
+    pthread_mutex_unlock(&q->lock); \
+    rc = -1; \
+  } else { \
+    data = q->type[q->front]; \
+    q->count--; \
+  } \
+  pthread_mutex_unlock(&q->lock); \
+  rc; \
+})
+
+
+typedef union {
+  uint32_t u32;
+  void* p;
+} mm_jpeg_q_data_t;
+
+  typedef struct {
+  struct cam_list list;
+  mm_jpeg_q_data_t data;
+} mm_jpeg_q_node_t;
+
 typedef struct {
+  mm_jpeg_q_node_t head; /* dummy head */
+  uint32_t size;
+  pthread_mutex_t lock;
+} mm_jpeg_queue_t;
+
+typedef enum {
+  MM_JPEG_CMD_TYPE_JOB,          /* job cmd */
+  MM_JPEG_CMD_TYPE_EXIT,         /* EXIT cmd for exiting jobMgr thread */
+  MM_JPEG_CMD_TYPE_DECODE_JOB,
+  MM_JPEG_CMD_TYPE_MAX
+} mm_jpeg_cmd_type_t;
+
+typedef struct mm_jpeg_job_session {
   uint32_t client_hdl;           /* client handler */
   uint32_t jobId;                /* job ID */
   uint32_t sessionId;            /* session ID */
   mm_jpeg_encode_params_t params; /* encode params */
+  mm_jpeg_decode_params_t dec_params; /* encode params */
   mm_jpeg_encode_job_t encode_job;             /* job description */
+  mm_jpeg_decode_job_t decode_job;
   pthread_t encode_pid;          /* encode thread handler*/
 
   void *jpeg_obj;                /* ptr to mm_jpeg_obj */
@@ -86,7 +281,7 @@ typedef struct {
 
   int state_change_pending;      /* flag to indicate if state change is pending */
   OMX_ERRORTYPE error_flag;      /* variable to indicate error during encoding */
-  OMX_BOOL abort_flag;      /* variable to indicate abort during encoding */
+  mm_jpeg_abort_state_t abort_state; /* variable to indicate abort during encoding */
 
   /* OMX related */
   OMX_HANDLETYPE omx_handle;                      /* handle to omx engine */
@@ -119,9 +314,30 @@ typedef struct {
   OMX_BOOL config;
 
   /* job history count to generate unique id */
-  int job_hist;
+  unsigned int job_hist;
 
   OMX_BOOL encoding;
+
+  buffer_t work_buffer;
+
+  OMX_EVENTTYPE omxEvent;
+  int event_pending;
+
+  uint8_t *meta_enc_key;
+  size_t meta_enc_keylen;
+
+  struct mm_jpeg_job_session *next_session;
+
+  uint32_t curr_out_buf_idx;
+
+  uint32_t num_omx_sessions;
+  OMX_BOOL auto_out_buf;
+
+  mm_jpeg_queue_t *session_handle_q;
+  mm_jpeg_queue_t *out_buf_q;
+
+  int thumb_from_main;
+  uint32_t job_index;
 } mm_jpeg_job_session_t;
 
 typedef struct {
@@ -131,9 +347,16 @@ typedef struct {
 } mm_jpeg_encode_job_info_t;
 
 typedef struct {
+  mm_jpeg_decode_job_t decode_job;
+  uint32_t job_id;
+  uint32_t client_handle;
+} mm_jpeg_decode_job_info_t;
+
+typedef struct {
   mm_jpeg_cmd_type_t type;
   union {
     mm_jpeg_encode_job_info_t enc_info;
+    mm_jpeg_decode_job_info_t dec_info;
   };
 } mm_jpeg_job_q_node_t;
 
@@ -160,7 +383,27 @@ typedef struct mm_jpeg_obj_t {
   pthread_mutex_t job_lock;                       /* job lock */
   mm_jpeg_job_cmd_thread_t job_mgr;               /* job mgr thread including todo_q*/
   mm_jpeg_queue_t ongoing_job_q;                  /* queue for ongoing jobs */
+  buffer_t ionBuffer[MM_JPEG_CONCURRENT_SESSIONS_COUNT];
+
+
+  /* Max pic dimension for work buf calc*/
+  uint32_t max_pic_w;
+  uint32_t max_pic_h;
+#ifdef LOAD_ADSP_RPC_LIB
+  void *adsprpc_lib_handle;
+#endif
+
+  uint32_t work_buf_cnt;
+
+  uint32_t num_sessions;
+
 } mm_jpeg_obj;
+
+/** mm_jpeg_pending_func_t:
+ *
+ * Intermediate function for transition change
+ **/
+typedef OMX_ERRORTYPE (*mm_jpeg_transition_func_t)(void *);
 
 extern int32_t mm_jpeg_init(mm_jpeg_obj *my_obj);
 extern int32_t mm_jpeg_deinit(mm_jpeg_obj *my_obj);
@@ -178,7 +421,28 @@ extern int32_t mm_jpeg_create_session(mm_jpeg_obj *my_obj,
   uint32_t* p_session_id);
 extern int32_t mm_jpeg_destroy_session_by_id(mm_jpeg_obj *my_obj,
   uint32_t session_id);
-extern int32_t mm_jpeg_destroy_job(mm_jpeg_job_session_t *p_session);
+
+extern int32_t mm_jpegdec_init(mm_jpeg_obj *my_obj);
+extern int32_t mm_jpegdec_deinit(mm_jpeg_obj *my_obj);
+extern int32_t mm_jpeg_jobmgr_thread_release(mm_jpeg_obj * my_obj);
+extern int32_t mm_jpeg_jobmgr_thread_launch(mm_jpeg_obj *my_obj);
+extern int32_t mm_jpegdec_start_decode_job(mm_jpeg_obj *my_obj,
+  mm_jpeg_job_t* job,
+  uint32_t* jobId);
+
+extern int32_t mm_jpegdec_create_session(mm_jpeg_obj *my_obj,
+  uint32_t client_hdl,
+  mm_jpeg_decode_params_t *p_params,
+  uint32_t* p_session_id);
+
+extern int32_t mm_jpegdec_destroy_session_by_id(mm_jpeg_obj *my_obj,
+  uint32_t session_id);
+
+extern int32_t mm_jpegdec_abort_job(mm_jpeg_obj *my_obj,
+  uint32_t jobId);
+
+int32_t mm_jpegdec_process_decoding_job(mm_jpeg_obj *my_obj,
+    mm_jpeg_job_q_node_t* job_node);
 
 /* utiltity fucntion declared in mm-camera-inteface2.c
  * and need be used by mm-camera and below*/
@@ -187,19 +451,59 @@ uint8_t mm_jpeg_util_get_index_by_handler(uint32_t handler);
 
 /* basic queue functions */
 extern int32_t mm_jpeg_queue_init(mm_jpeg_queue_t* queue);
-extern int32_t mm_jpeg_queue_enq(mm_jpeg_queue_t* queue, void* node);
-extern void* mm_jpeg_queue_deq(mm_jpeg_queue_t* queue);
+extern int32_t mm_jpeg_queue_enq(mm_jpeg_queue_t* queue,
+    mm_jpeg_q_data_t data);
+extern int32_t mm_jpeg_queue_enq_head(mm_jpeg_queue_t* queue,
+    mm_jpeg_q_data_t data);
+extern mm_jpeg_q_data_t mm_jpeg_queue_deq(mm_jpeg_queue_t* queue);
 extern int32_t mm_jpeg_queue_deinit(mm_jpeg_queue_t* queue);
 extern int32_t mm_jpeg_queue_flush(mm_jpeg_queue_t* queue);
 extern uint32_t mm_jpeg_queue_get_size(mm_jpeg_queue_t* queue);
-extern void* mm_jpeg_queue_peek(mm_jpeg_queue_t* queue);
+extern mm_jpeg_q_data_t mm_jpeg_queue_peek(mm_jpeg_queue_t* queue);
 extern int32_t addExifEntry(QOMX_EXIF_INFO *p_exif_info, exif_tag_id_t tagid,
   exif_tag_type_t type, uint32_t count, void *data);
 extern int32_t releaseExifEntry(QEXIF_INFO_DATA *p_exif_data);
-extern int process_meta_data_v1(cam_metadata_info_t *p_meta,
-  QOMX_EXIF_INFO *exif_info, mm_jpeg_exif_params_t *p_cam_exif_params);
-extern int process_meta_data_v3(metadata_buffer_t *p_meta,
-  QOMX_EXIF_INFO *exif_info, mm_jpeg_exif_params_t *p_cam3a_params);
+extern int process_meta_data(metadata_buffer_t *p_meta,
+  QOMX_EXIF_INFO *exif_info, mm_jpeg_exif_params_t *p_cam3a_params,
+  cam_hal_version_t hal_version);
+
+OMX_ERRORTYPE mm_jpeg_session_change_state(mm_jpeg_job_session_t* p_session,
+  OMX_STATETYPE new_state,
+  mm_jpeg_transition_func_t p_exec);
+
+int map_jpeg_format(mm_jpeg_color_format color_fmt);
+
+OMX_BOOL mm_jpeg_session_abort(mm_jpeg_job_session_t *p_session);
+/**
+ *
+ * special queue functions for job queue
+ **/
+mm_jpeg_job_q_node_t* mm_jpeg_queue_remove_job_by_client_id(
+  mm_jpeg_queue_t* queue, uint32_t client_hdl);
+mm_jpeg_job_q_node_t* mm_jpeg_queue_remove_job_by_job_id(
+  mm_jpeg_queue_t* queue, uint32_t job_id);
+mm_jpeg_job_q_node_t* mm_jpeg_queue_remove_job_by_session_id(
+  mm_jpeg_queue_t* queue, uint32_t session_id);
+mm_jpeg_job_q_node_t* mm_jpeg_queue_remove_job_unlk(
+  mm_jpeg_queue_t* queue, uint32_t job_id);
+
+
+/** mm_jpeg_queue_func_t:
+ *
+ * Intermediate function for queue operation
+ **/
+typedef void (*mm_jpeg_queue_func_t)(void *);
+
+/** mm_jpeg_exif_flash_mode:
+ *
+ * Exif flash mode values
+ **/
+typedef enum {
+  MM_JPEG_EXIF_FLASH_MODE_ON   = 0x1,
+  MM_JPEG_EXIF_FLASH_MODE_OFF  = 0x2,
+  MM_JPEG_EXIF_FLASH_MODE_AUTO = 0x3,
+  MM_JPEG_EXIF_FLASH_MODE_MAX
+} mm_jpeg_exif_flash_mode;
 
 #endif /* MM_JPEG_H_ */
 

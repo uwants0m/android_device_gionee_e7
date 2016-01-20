@@ -1,4 +1,4 @@
-/* Copyright (c) 2012, The Linux Foundation. All rights reserved.
+/* Copyright (c) 2013-2014, The Linux Foundation. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are
@@ -27,42 +27,69 @@
  *
  */
 
-#ifndef __QCAMERA2FACTORY_H__
-#define __QCAMERA2FACTORY_H__
+#ifndef __MM_JPEG_IONBUF_H__
+#define __MM_JPEG_IONBUF_H__
 
-#include <hardware/camera.h>
-#include <system/camera.h>
-#include <media/msmb_camera.h>
 
-#include "QCamera2HWI.h"
+#include <stdio.h>
+#include <linux/msm_ion.h>
+#include <sys/mman.h>
+#include <unistd.h>
+#include <errno.h>
+#include <fcntl.h>
+#include <string.h>
+#include "mm_jpeg_dbg.h"
 
-namespace qcamera {
+typedef struct  {
+  struct ion_fd_data ion_info_fd;
+  struct ion_allocation_data alloc;
+  int p_pmem_fd;
+  size_t size;
+  int ion_fd;
+  uint8_t *addr;
+} buffer_t;
 
-class QCamera2Factory
-{
-public:
-    QCamera2Factory();
-    virtual ~QCamera2Factory();
+/** buffer_allocate:
+ *
+ *  Arguments:
+ *     @p_buffer: ION buffer
+ *
+ *  Return:
+ *     buffer address
+ *
+ *  Description:
+ *      allocates ION buffer
+ *
+ **/
+void* buffer_allocate(buffer_t *p_buffer, int cached);
 
-    static int get_number_of_cameras();
-    static int get_camera_info(int camera_id, struct camera_info *info);
+/** buffer_deallocate:
+ *
+ *  Arguments:
+ *     @p_buffer: ION buffer
+ *
+ *  Return:
+ *     error val
+ *
+ *  Description:
+ *      deallocates ION buffer
+ *
+ **/
+int buffer_deallocate(buffer_t *p_buffer);
 
-private:
-    int getNumberOfCameras();
-    int getCameraInfo(int camera_id, struct camera_info *info);
-    int cameraDeviceOpen(int camera_id, struct hw_device_t **hw_device);
-    static int camera_device_open(const struct hw_module_t *module, const char *id,
-                struct hw_device_t **hw_device);
+/** buffer_invalidate:
+ *
+ *  Arguments:
+ *     @p_buffer: ION buffer
+ *
+ *  Return:
+ *     error val
+ *
+ *  Description:
+ *      Invalidates the cached buffer
+ *
+ **/
+int buffer_invalidate(buffer_t *p_buffer);
 
-public:
-    static struct hw_module_methods_t mModuleMethods;
+#endif
 
-private:
-    int mNumOfCameras;
-};
-
-}; /*namespace qcamera*/
-
-extern camera_module_t HAL_MODULE_INFO_SYM;
-
-#endif /* ANDROID_HARDWARE_QUALCOMM_CAMERA_H */
