@@ -18,8 +18,8 @@
 const char CameraParameters::SCENE_MODE_GESTURE[] = "gesture"; \
 const char CameraParameters::SCENE_MODE_FOOD[] = "food"; \
 int CameraParameters::getStr(const char *key) const { return -1; }; \
-int QCamera2HardwareInterface::gnupdatePictureFrame; \
-int QCamera2HardwareInterface::gnupdateFeatureParameters; \
+int QCamera2HardwareInterface::gnupdatePictureFrame(); \
+int QCamera2HardwareInterface::gnupdateFeatureParameters(); \
 int QCamera2HardwareInterface::updateParameters(const char *parms, bool &needRestart) const { return -1; };
  
 #define CAMERA_PARAMETERS_EXTRA_H \
