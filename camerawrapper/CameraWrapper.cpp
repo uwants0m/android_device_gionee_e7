@@ -133,17 +133,8 @@ static char *camera_fixup_setparams(int id, const char *settings)
     params.dump();
 #endif
 
-    /* Convert to Qualcomm-style max/min parameters */
-    if (params.get("max-contrast")) {
-        params.set("contrast-max", params.get("max-contrast"));
-    }
-    if (params.get("max-saturation")) {
-        params.set("saturation-max", params.get("max-saturation"));
-    }
-    if (params.get("max-sharpness")) {
-        params.set("sharpness-max", params.get("max-sharpness"));
-    }
-
+params.set(android::CameraParameters::SCENE_MODE_FOOD, "food");
+params.set(android::CameraParameters::SCENE_MODE_GESTURE, "gesture");
 
     android::String8 strParams = params.flatten();
 
