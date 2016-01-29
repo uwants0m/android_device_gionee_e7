@@ -98,7 +98,6 @@ static int check_vendor_module()
 
 static char *camera_fixup_getparams(const char *settings)
 {
-    int rotation = 0;
 
     android::CameraParameters params;
     params.unflatten(android::String8(settings));
@@ -107,33 +106,8 @@ static char *camera_fixup_getparams(const char *settings)
     ALOGV("%s: original parameters:", __FUNCTION__);
     params.dump();
 #endif
-
-    if (params.get(android::CameraParameters::KEY_ROTATION)) {
-        rotation = atoi(params.get(android::CameraParameters::KEY_ROTATION));
-    }
-
-    /* Disable face detection */
-    params.set(android::CameraParameters::KEY_MAX_NUM_DETECTED_FACES_HW, "off");
-    params.set(android::CameraParameters::KEY_MAX_NUM_DETECTED_FACES_SW, "off");
     params.set(android::CameraParameters::SCENE_MODE_GESTURE, "gesture");
     params.set(android::CameraParameters::SCENE_MODE_FOOD, "food");
-
-    params.set("preview-frame-rate-mode", "frame-rate-fixed");
-
-    /* Fix rotation missmatch */
-    switch (rotation) {
-        case 90:
-            params.set(android::CameraParameters::KEY_ROTATION, "0");
-            break;
-        case 180:
-            params.set(android::CameraParameters::KEY_ROTATION, "90");
-            break;
-        case 270:
-            params.set(android::CameraParameters::KEY_ROTATION, "180");
-            break;
-        default:
-            break;
-    }
 
 #ifdef LOG_PARAMETERS
     ALOGV("%s: fixed parameters:", __FUNCTION__);
@@ -148,7 +122,6 @@ static char *camera_fixup_getparams(const char *settings)
 
 static char *camera_fixup_setparams(int id, const char *settings)
 {
-    bool isVideo = false;
 
     android::CameraParameters params;
     params.unflatten(android::String8(settings));
@@ -157,31 +130,8 @@ static char *camera_fixup_setparams(int id, const char *settings)
     ALOGV("%s: original parameters:", __FUNCTION__);
     params.dump();
 #endif
-
-    if (params.get(android::CameraParameters::KEY_RECORDING_HINT)) {
-        isVideo = !strcmp(params.get(android::CameraParameters::KEY_RECORDING_HINT), "true");
-    }
-
-    /* Disable face detection */
-    params.set(android::CameraParameters::KEY_MAX_NUM_DETECTED_FACES_HW, "off");
-    params.set(android::CameraParameters::KEY_MAX_NUM_DETECTED_FACES_SW, "off");
     params.set(android::CameraParameters::SCENE_MODE_GESTURE, "gesture");
     params.set(android::CameraParameters::SCENE_MODE_FOOD, "food");
-
-    /* Enable fixed fps mode */
-    params.set("preview-frame-rate-mode", "frame-rate-fixed");
-
-    if (!isVideo && id == 0) {
-        /* Disable OIS, set continuous burst to prevent crash */
-        params.set(android::CameraParameters::KEY_CONTIBURST_TYPE, "unlimited");
-        params.set(android::CameraParameters::KEY_OIS_SUPPORT, "false");
-        params.set(android::CameraParameters::KEY_OIS_MODE, "off");
-    }
-
-    if (isVideo && id == 1) {
-        /* Front camera only supports infinity */
-        params.set(android::CameraParameters::KEY_FOCUS_MODE, "infinity");
-    }
 
 #ifdef LOG_PARAMETERS
     ALOGV("%s: fixed parameters:", __FUNCTION__);
