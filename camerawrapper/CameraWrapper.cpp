@@ -120,6 +120,9 @@ static char *camera_fixup_getparams(int __attribute__((unused)) id,
         params.set("max-sharpness", params.get("sharpness-max"));
     }
 
+params.set(android::CameraParameters::SCENE_MODE_GESTURE, "gesture");
+    params.set(android::CameraParameters::SCENE_MODE_FOOD, "food");
+
     android::String8 strParams = params.flatten();
     char *ret = strdup(strParams.string());
 
@@ -151,9 +154,6 @@ static char *camera_fixup_setparams(int id, const char *settings)
     if (params.get("max-sharpness")) {
         params.set("sharpness-max", params.get("max-sharpness"));
     }
-
-    params.set(android::CameraParameters::SCENE_MODE_GESTURE, "gesture");
-    params.set(android::CameraParameters::SCENE_MODE_FOOD, "food");
  
     android::String8 strParams = params.flatten();
 
