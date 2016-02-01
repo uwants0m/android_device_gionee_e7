@@ -104,7 +104,6 @@ TARGET_PROVIDES_WCNSS_QMI        := true
 TARGET_USES_WCNSS_MAC_ADDR_REV   := true
 
 BOARD_EGL_CFG := device/gionee/e7/egl.cfg
-BOARD_USES_MULTIPLE_SDCARD_FS := true
 
 # fix this up by examining /proc/mtd on a running device
 BOARD_MKBOOTIMG_ARGS := --ramdisk_offset 0x02000000 --kernel_offset 0x00008000
