@@ -136,7 +136,6 @@ static char *camera_fixup_setparams(int id, const char *settings)
     params.set(android::CameraParameters::SCENE_MODE_GESTURE, "gesture");
     params.set(android::CameraParameters::SCENE_MODE_FOOD, "food");
 
-
     android::String8 strParams = params.flatten();
 
     if (fixed_set_params[id])
