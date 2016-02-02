@@ -34,6 +34,10 @@
 #include <camera/Camera.h>
 #include <camera/CameraParameters.h>
 
+//add gionee specific parameters
+static char SCENE_MODE_GESTURE[] = "gesture";
+static char SCENE_MODE_FOOD[] = "food";
+
 static android::Mutex gCameraWrapperLock;
 static camera_module_t *gVendorModule = 0;
 
@@ -109,9 +113,6 @@ static char *camera_fixup_getparams(int __attribute__((unused)) id,
     params.dump();
 #endif
 
-    params.set(android::CameraParameters::SCENE_MODE_GESTURE, "gesture");
-    params.set(android::CameraParameters::SCENE_MODE_FOOD, "food");
-
     android::String8 strParams = params.flatten();
     char *ret = strdup(strParams.string());
 
@@ -132,9 +133,6 @@ static char *camera_fixup_setparams(int id, const char *settings)
     ALOGV("%s: original parameters:", __FUNCTION__);
     params.dump();
 #endif
-
-    params.set(android::CameraParameters::SCENE_MODE_GESTURE, "gesture");
-    params.set(android::CameraParameters::SCENE_MODE_FOOD, "food");
 
     android::String8 strParams = params.flatten();
 
