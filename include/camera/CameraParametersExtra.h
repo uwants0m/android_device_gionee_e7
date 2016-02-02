@@ -14,6 +14,9 @@
  * limitations under the License.
  */
 
+#ifndef ANDROID_CAMERA_PARAMETERS_EXTRA_H
+#define ANDROID_CAMERA_PARAMETERS_EXTRA_H
+
 #define CAMERA_PARAMETERS_EXTRA_C \
 const char CameraParameters::SCENE_MODE_GESTURE[] = "gesture"; \
 const char CameraParameters::SCENE_MODE_FOOD[] = "food"; \
@@ -23,3 +26,5 @@ int CameraParameters::getStr(const char *key) const { return -1; };
     static const char SCENE_MODE_GESTURE[]; \
     static const char SCENE_MODE_FOOD[]; \
     int getStr(const char *key) const;
+
+#endif
