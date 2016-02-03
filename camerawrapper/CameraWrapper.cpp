@@ -153,6 +153,7 @@ static char *camera_fixup_setparams(int id, const char *settings)
     }
     params.set(android::CameraParameters::SCENE_MODE_GESTURE, "gesture");
     params.set(android::CameraParameters::SCENE_MODE_FOOD, "food");
+    params.set("setBurstLEDFlashLevel", "cam_led_flash_burst_level");
 
     android::String8 strParams = params.flatten();
 
