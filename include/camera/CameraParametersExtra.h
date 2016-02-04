@@ -17,13 +17,9 @@
 #define CAMERA_PARAMETERS_EXTRA_C \
 const char CameraParameters::SCENE_MODE_GESTURE[] = "gesture"; \
 const char CameraParameters::SCENE_MODE_FOOD[] = "food"; \
-int CameraParameters::getStr(const char *key) const { return -1; }; \
-const char *CameraParameters::getBurstLEDFlashLevel() const { return get(cam_led_flash_burst_level); }; \
-void CameraParameters::setBurstLEDFlashLevel(const char *mode) { set(cam_led_flash_burst_level, mode); };
+int CameraParameters::getStr(const char *key) const { return -1; };
 
 #define CAMERA_PARAMETERS_EXTRA_H \
     static const char SCENE_MODE_GESTURE[]; \
     static const char SCENE_MODE_FOOD[]; \
-    int getStr(const char *key) const; \
-    const char *getBurstLEDFlashLevel() const; \
-    void setBurstLEDFlashLevel(const char *mode);
+    int getStr(const char *key) const;
