@@ -19,7 +19,7 @@ PRODUCT_COPY_FILES += \
     device/gionee/e7/rootdir/twrp.fstab:recovery/root/etc/twrp.fstab 
 
 $(call inherit-product, frameworks/native-caf/build/phone-xxxhdpi-3072-dalvik-heap.mk)
-$(call inherit-product, frameworks/native-caf/build/phone-xxxhdpi-3072-hwui-memory.mk)
+$(call inherit-product, frameworks/native-caf/build/phone-xxhdpi-2048-hwui-memory.mk)
 
 # E7 Init files
 PRODUCT_COPY_FILES += \
@@ -290,11 +290,5 @@ PRODUCT_PROPERTY_OVERRIDES += \
     persist.gps.qmienabled=true
 
 PRODUCT_PROPERTY_OVERRIDES += \
-    ro.build.selinux=0 \
-    ro.boot.selinux=0 \
-    ro.sf.lcd_density=480 \
-    persist.fuse_sdcard=true \
-    ro.vold.primary_physical=1
-
-$(call inherit-product, frameworks/native/build/phone-xxxhdpi-3072-dalvik-heap.mk)
-$(call inherit-product, frameworks/native/build/phone-xxxhdpi-3072-hwui-memory.mk)
+    ro.build.selinux=1 \
+    ro.sf.lcd_density=480
