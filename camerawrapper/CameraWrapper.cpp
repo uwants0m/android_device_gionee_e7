@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015, The CyanogenMod Project
+ * Copyright (C) 2012, The CyanogenMod Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,9 +22,8 @@
 */
 
 //#define LOG_NDEBUG 0
-//#define LOG_PARAMETERS
 
-#define LOG_TAG "camera"
+#define LOG_TAG "CameraWrapper"
 #include <cutils/log.h>
 
 #include <utils/threads.h>
@@ -34,19 +33,21 @@
 #include <camera/Camera.h>
 #include <camera/CameraParameters.h>
 
+const char KEY_QC_VIDEO_HDR[] = "video-hdr";
+const char KEY_QC_SUPPORTED_VIDEO_HDR_MODES[] = "video-hdr-values";
+
 static android::Mutex gCameraWrapperLock;
 static camera_module_t *gVendorModule = 0;
 
 static char **fixed_set_params = NULL;
 
 static int camera_device_open(const hw_module_t *module, const char *name,
-                hw_device_t **device);
-static int camera_device_close(hw_device_t *device);
+        hw_device_t **device);
 static int camera_get_number_of_cameras(void);
 static int camera_get_camera_info(int camera_id, struct camera_info *info);
 
 static struct hw_module_methods_t camera_module_methods = {
-    .open = camera_device_open
+    .open = camera_device_open,
 };
 
 camera_module_t HAL_MODULE_INFO_SYM = {
@@ -91,62 +92,184 @@ static int check_vendor_module()
         return 0;
 
     rv = hw_get_module_by_class("camera", "vendor",
-            (const hw_module_t **)&gVendorModule);
-
+            (const hw_module_t**)&gVendorModule);
     if (rv)
         ALOGE("failed to open vendor camera module");
     return rv;
 }
 
-static char *camera_fixup_getparams(int __attribute__((unused)) id,
-    const char *settings)
+static char *camera_fixup_getparams(int id, const char *settings)
 {
+    int rotation = 0;
+    const char *captureMode = "normal";
+    const char *videoHdr = "false";
+
     android::CameraParameters params;
     params.unflatten(android::String8(settings));
 
-#ifdef LOG_PARAMETERS
-    ALOGV("%s: Original parameters:", __FUNCTION__);
+#if !LOG_NDEBUG
+    ALOGV("%s: original parameters:", __FUNCTION__);
     params.dump();
 #endif
 
+    if (params.get(android::CameraParameters::KEY_CAPTURE_MODE)) {
+        captureMode = params.get(android::CameraParameters::KEY_CAPTURE_MODE);
+    }
+
+    if (params.get(android::CameraParameters::KEY_ROTATION)) {
+        rotation = atoi(params.get(android::CameraParameters::KEY_ROTATION));
+    }
+
+    if (params.get(KEY_QC_VIDEO_HDR)) {
+        videoHdr = params.get(KEY_QC_VIDEO_HDR);
+    }
+
+    /* Disable face detection */
+    params.set(android::CameraParameters::KEY_MAX_NUM_DETECTED_FACES_HW, "0");
+    params.set(android::CameraParameters::KEY_MAX_NUM_DETECTED_FACES_SW, "0");
+    params.set(android::CameraParameters::KEY_FACE_DETECTION, "off");
+
+    /* Disable denoise */
+    params.set(android::CameraParameters::KEY_SUPPORTED_DENOISE, "off");
+
+    /* Advertise video HDR values */
+    params.set(KEY_QC_SUPPORTED_VIDEO_HDR_MODES, "off,on");
+
+    /* Fix video HDR values */
+    if (!strcmp(videoHdr, "true")) {
+        params.set(KEY_QC_VIDEO_HDR, "on");
+    }
+    if (!strcmp(videoHdr, "false")) {
+        params.set(KEY_QC_VIDEO_HDR, "off");
+    }
+
+    params.set("preview-frame-rate-mode", "frame-rate-fixed");
+    params.set(android::CameraParameters::KEY_PREVIEW_FPS_RANGE, "10000,60000");
+
+    /* Fix rotation missmatch */
+    switch (rotation) {
+        case 90:
+            params.set(android::CameraParameters::KEY_ROTATION, "0");
+            break;
+        case 180:
+            params.set(android::CameraParameters::KEY_ROTATION, "90");
+            break;
+        case 270:
+            params.set(android::CameraParameters::KEY_ROTATION, "180");
+            break;
+        default:
+            break;
+    }
+
+    /* Set HDR mode */
+    if (!strcmp(captureMode, "hdr")) {
+        params.set(android::CameraParameters::KEY_SCENE_MODE,
+                android::CameraParameters::SCENE_MODE_HDR);
+    }
+
+    /* Set sensor parameters */
+    if (id == 0) {
+        params.set(android::CameraParameters::KEY_FOCAL_LENGTH, "3.82");
+        params.set(android::CameraParameters::KEY_HORIZONTAL_VIEW_ANGLE, "69.6");
+        params.set(android::CameraParameters::KEY_VERTICAL_VIEW_ANGLE, "43.0");
+    }
+    if (id == 1) {
+        params.set(android::CameraParameters::KEY_FOCAL_LENGTH, "1.59");
+    }
     params.set(android::CameraParameters::SCENE_MODE_GESTURE, "gesture");
     params.set(android::CameraParameters::SCENE_MODE_FOOD, "food");
-
-    android::String8 strParams = params.flatten();
-    char *ret = strdup(strParams.string());
-
-#ifdef LOG_PARAMETERS
+    
+#if !LOG_NDEBUG
     ALOGV("%s: fixed parameters:", __FUNCTION__);
     params.dump();
 #endif
+
+    android::String8 strParams = params.flatten();
+    char *ret = strdup(strParams.string());
 
     return ret;
 }
 
 static char *camera_fixup_setparams(int id, const char *settings)
 {
+    bool isVideo = false;
+    const char *sceneMode = "auto";
+    const char *videoHdr = "false";
+
     android::CameraParameters params;
     params.unflatten(android::String8(settings));
 
-#ifdef LOG_PARAMETERS
+#if !LOG_NDEBUG
     ALOGV("%s: original parameters:", __FUNCTION__);
     params.dump();
 #endif
 
+    if (params.get(android::CameraParameters::KEY_RECORDING_HINT)) {
+        isVideo = !strcmp(params.get(android::CameraParameters::KEY_RECORDING_HINT), "true");
+    }
+
+    if (params.get(android::CameraParameters::KEY_SCENE_MODE)) {
+        sceneMode = params.get(android::CameraParameters::KEY_SCENE_MODE);
+    }
+
+    if (params.get(KEY_QC_VIDEO_HDR)) {
+        videoHdr = params.get(KEY_QC_VIDEO_HDR);
+    }
+
+    /* Disable face detection */
+    params.set(android::CameraParameters::KEY_MAX_NUM_DETECTED_FACES_HW, "0");
+    params.set(android::CameraParameters::KEY_MAX_NUM_DETECTED_FACES_SW, "0");
+    params.set(android::CameraParameters::KEY_FACE_DETECTION, "off");
+
+    /* Disable denoise */
+    params.set(android::CameraParameters::KEY_SUPPORTED_DENOISE, "off");
+
+    /* Enable fixed fps mode */
+    params.set("preview-frame-rate-mode", "frame-rate-fixed");
+    params.set("preview-fps-range", "20000,60000");
+
+    /* Fix video HDR values */
+    if (!strcmp(videoHdr, "on")) {
+        params.set(KEY_QC_VIDEO_HDR, "true");
+    }
+    if (!strcmp(videoHdr, "off")) {
+        params.set(KEY_QC_VIDEO_HDR, "false");
+    }
+
+    if (!isVideo && id == 0) {
+        /* Disable OIS, set continuous burst to prevent crash */
+        params.set(android::CameraParameters::KEY_CONTIBURST_TYPE, "unlimited");
+        params.set(android::CameraParameters::KEY_OIS_SUPPORT, "false");
+        params.set(android::CameraParameters::KEY_OIS_MODE, "off");
+
+        /* Enable HDR */
+        if (!strcmp(sceneMode, android::CameraParameters::SCENE_MODE_HDR)) {
+            params.set(android::CameraParameters::KEY_SCENE_MODE, "off");
+            params.set(android::CameraParameters::KEY_CAPTURE_MODE, "hdr");
+        } else {
+            params.set(android::CameraParameters::KEY_CAPTURE_MODE, "normal");
+            params.set(android::CameraParameters::KEY_ZSL, "on");
+            params.set(android::CameraParameters::KEY_CAMERA_MODE, "1");
+        }
+    }
+
+    if (isVideo && id == 1) {
+        /* Front camera only supports infinity */
+        params.set(android::CameraParameters::KEY_FOCUS_MODE, "infinity");
+    }
     params.set(android::CameraParameters::SCENE_MODE_GESTURE, "gesture");
     params.set(android::CameraParameters::SCENE_MODE_FOOD, "food");
 
-    android::String8 strParams = params.flatten();
+#if !LOG_NDEBUG
+    ALOGV("%s: fixed parameters:", __FUNCTION__);
+    params.dump();
+#endif
 
+    android::String8 strParams = params.flatten();
     if (fixed_set_params[id])
         free(fixed_set_params[id]);
     fixed_set_params[id] = strdup(strParams.string());
     char *ret = fixed_set_params[id];
-
-#ifdef LOG_PARAMETERS
-    ALOGV("%s: fixed parameters:", __FUNCTION__);
-    params.dump();
-#endif
 
     return ret;
 }
@@ -154,8 +277,7 @@ static char *camera_fixup_setparams(int id, const char *settings)
 /*******************************************************************
  * implementation of camera_device_ops functions
  *******************************************************************/
-static char *camera_get_parameters(struct camera_device *device);
-static int camera_set_parameters(struct camera_device *device, const char *params);
+
 static int camera_set_preview_window(struct camera_device *device,
         struct preview_stream_ops *window)
 {
@@ -181,7 +303,8 @@ static void camera_set_callbacks(struct camera_device *device,
     if (!device)
         return;
 
-    VENDOR_CALL(device, set_callbacks, notify_cb, data_cb, data_cb_timestamp, get_memory, user);
+    VENDOR_CALL(device, set_callbacks, notify_cb, data_cb, data_cb_timestamp,
+            get_memory, user);
 }
 
 static void camera_enable_msg_type(struct camera_device *device,
@@ -318,6 +441,7 @@ static int camera_auto_focus(struct camera_device *device)
     if (!device)
         return -EINVAL;
 
+
     return VENDOR_CALL(device, auto_focus);
 }
 
@@ -354,7 +478,8 @@ static int camera_cancel_picture(struct camera_device *device)
     return VENDOR_CALL(device, cancel_picture);
 }
 
-static int camera_set_parameters(struct camera_device *device, const char *params)
+static int camera_set_parameters(struct camera_device *device,
+        const char *params)
 {
     ALOGV("%s->%08X->%08X", __FUNCTION__, (uintptr_t)device,
             (uintptr_t)(((wrapper_camera_device_t*)device)->vendor));
@@ -484,7 +609,7 @@ static int camera_device_open(const hw_module_t *module, const char *name,
 
     android::Mutex::Autolock lock(gCameraWrapperLock);
 
-    ALOGV("camera_device open");
+    ALOGV("%s", __FUNCTION__);
 
     if (name != NULL) {
         if (check_vendor_module())
