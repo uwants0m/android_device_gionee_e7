@@ -17,9 +17,31 @@
 #define CAMERA_PARAMETERS_EXTRA_C \
 const char CameraParameters::SCENE_MODE_GESTURE[] = "gesture"; \
 const char CameraParameters::SCENE_MODE_FOOD[] = "food"; \
+const char CameraParameters::KEY_CAPTURE_MODE[] = "capture-mode"; \
+const char CameraParameters::KEY_FACE_DETECTION[] = "face-detection"; \
+const char CameraParameters::KEY_SUPPORTED_DENOISE[] = "denoise-values"; \
+const char CameraParameters::KEY_CONTIBURST_TYPE[] = "contiburst-type"; \
+const char CameraParameters::KEY_OIS_MODE[] = "ois_mode"; \
+const char CameraParameters::KEY_OIS_SUPPORT[] = "ois_support"; \
+const char CameraParameters::KEY_CAPTURE_MODE[] = "capture-mode"; \
+const char CameraParameters::CAPTURE_MODE_HDR[] = "hdr"; \
+const char CameraParameters::CAPTURE_MODE_NORMAL[] = "normal"; \
+const char CameraParameters::KEY_ZSL[] = "zsl"; \
+const char CameraParameters::KEY_CAMERA_MODE[] = "camera-mode"; \
 int CameraParameters::getStr(const char *key) const { return -1; };
 
 #define CAMERA_PARAMETERS_EXTRA_H \
     static const char SCENE_MODE_GESTURE[]; \
     static const char SCENE_MODE_FOOD[]; \
+    static const char KEY_CAPTURE_MODE[]; \
+    static const char KEY_FACE_DETECTION[]; \
+    static const char KEY_SUPPORTED_DENOISE[]; \
+    static const char KEY_CONTIBURST_TYPE[]; \
+    static const char KEY_OIS_MODE[]; \
+    static const char KEY_OIS_SUPPORT[]; \
+    static const char KEY_CAPTURE_MODE[]; \
+    static const char CAPTURE_MODE_HDR[]; \
+    static const char CAPTURE_MODE_NORMAL[]; \
+    static const char KEY_ZSL[]; \
+    static const char KEY_CAMERA_MODE[]; \
     int getStr(const char *key) const;
