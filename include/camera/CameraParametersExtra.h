@@ -23,7 +23,6 @@ const char CameraParameters::KEY_SUPPORTED_DENOISE[] = "denoise-values"; \
 const char CameraParameters::KEY_CONTIBURST_TYPE[] = "contiburst-type"; \
 const char CameraParameters::KEY_OIS_MODE[] = "ois_mode"; \
 const char CameraParameters::KEY_OIS_SUPPORT[] = "ois_support"; \
-const char CameraParameters::KEY_CAPTURE_MODE[] = "capture-mode"; \
 const char CameraParameters::CAPTURE_MODE_HDR[] = "hdr"; \
 const char CameraParameters::CAPTURE_MODE_NORMAL[] = "normal"; \
 const char CameraParameters::KEY_ZSL[] = "zsl"; \
@@ -39,7 +38,6 @@ int CameraParameters::getStr(const char *key) const { return -1; };
     static const char KEY_CONTIBURST_TYPE[]; \
     static const char KEY_OIS_MODE[]; \
     static const char KEY_OIS_SUPPORT[]; \
-    static const char KEY_CAPTURE_MODE[]; \
     static const char CAPTURE_MODE_HDR[]; \
     static const char CAPTURE_MODE_NORMAL[]; \
     static const char KEY_ZSL[]; \
