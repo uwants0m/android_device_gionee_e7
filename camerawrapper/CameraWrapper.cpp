@@ -215,7 +215,8 @@ static char *camera_fixup_setparams(int id, const char *settings)
     if (!strcmp(videoHdr, "off")) {
         params.set(KEY_QC_VIDEO_HDR, "false");
     }
-
+    
+    if (!isVideo && id == 0) {
         /* Enable HDR */
         if (!strcmp(sceneMode, android::CameraParameters::SCENE_MODE_HDR)) {
             params.set(android::CameraParameters::KEY_SCENE_MODE, "off");
