@@ -124,13 +124,8 @@ static char *camera_fixup_getparams(int id, const char *settings)
         videoHdr = params.get(KEY_QC_VIDEO_HDR);
     }
 
-    /* Disable face detection */
-    params.set(android::CameraParameters::KEY_MAX_NUM_DETECTED_FACES_HW, "0");
-    params.set(android::CameraParameters::KEY_MAX_NUM_DETECTED_FACES_SW, "0");
-    params.set(android::CameraParameters::KEY_FACE_DETECTION, "off");
-
     /* Disable denoise */
-    params.set(android::CameraParameters::KEY_SUPPORTED_DENOISE, "off");
+    params.set(android::CameraParameters::KEY_QC_SUPPORTED_DENOISE, "off");
 
     /* Advertise video HDR values */
     params.set(KEY_QC_SUPPORTED_VIDEO_HDR_MODES, "off,on");
@@ -144,7 +139,7 @@ static char *camera_fixup_getparams(int id, const char *settings)
     }
 
     params.set("preview-frame-rate-mode", "frame-rate-fixed");
-    params.set(android::CameraParameters::KEY_PREVIEW_FPS_RANGE, "10000,60000");
+    params.set(android::CameraParameters::KEY_PREVIEW_FPS_RANGE, "7500,30500");
 
     /* Fix rotation missmatch */
     switch (rotation) {
@@ -165,16 +160,6 @@ static char *camera_fixup_getparams(int id, const char *settings)
     if (!strcmp(captureMode, "hdr")) {
         params.set(android::CameraParameters::KEY_SCENE_MODE,
                 android::CameraParameters::SCENE_MODE_HDR);
-    }
-
-    /* Set sensor parameters */
-    if (id == 0) {
-        params.set(android::CameraParameters::KEY_FOCAL_LENGTH, "3.82");
-        params.set(android::CameraParameters::KEY_HORIZONTAL_VIEW_ANGLE, "69.6");
-        params.set(android::CameraParameters::KEY_VERTICAL_VIEW_ANGLE, "43.0");
-    }
-    if (id == 1) {
-        params.set(android::CameraParameters::KEY_FOCAL_LENGTH, "1.59");
     }
     params.set(android::CameraParameters::SCENE_MODE_GESTURE, "gesture");
     params.set(android::CameraParameters::SCENE_MODE_FOOD, "food");
@@ -216,17 +201,12 @@ static char *camera_fixup_setparams(int id, const char *settings)
         videoHdr = params.get(KEY_QC_VIDEO_HDR);
     }
 
-    /* Disable face detection */
-    params.set(android::CameraParameters::KEY_MAX_NUM_DETECTED_FACES_HW, "0");
-    params.set(android::CameraParameters::KEY_MAX_NUM_DETECTED_FACES_SW, "0");
-    params.set(android::CameraParameters::KEY_FACE_DETECTION, "off");
-
     /* Disable denoise */
-    params.set(android::CameraParameters::KEY_SUPPORTED_DENOISE, "off");
+    params.set(android::CameraParameters::KEY_QC_SUPPORTED_DENOISE, "off");
 
     /* Enable fixed fps mode */
     params.set("preview-frame-rate-mode", "frame-rate-fixed");
-    params.set("preview-fps-range", "20000,60000");
+    params.set("preview-fps-range", "7500,30500");
 
     /* Fix video HDR values */
     if (!strcmp(videoHdr, "on")) {
@@ -236,26 +216,15 @@ static char *camera_fixup_setparams(int id, const char *settings)
         params.set(KEY_QC_VIDEO_HDR, "false");
     }
 
-    if (!isVideo && id == 0) {
-        /* Disable OIS, set continuous burst to prevent crash */
-        params.set(android::CameraParameters::KEY_CONTIBURST_TYPE, "unlimited");
-        params.set(android::CameraParameters::KEY_OIS_SUPPORT, "false");
-        params.set(android::CameraParameters::KEY_OIS_MODE, "off");
-
         /* Enable HDR */
         if (!strcmp(sceneMode, android::CameraParameters::SCENE_MODE_HDR)) {
             params.set(android::CameraParameters::KEY_SCENE_MODE, "off");
             params.set(android::CameraParameters::KEY_CAPTURE_MODE, "hdr");
         } else {
             params.set(android::CameraParameters::KEY_CAPTURE_MODE, "normal");
-            params.set(android::CameraParameters::KEY_ZSL, "on");
-            params.set(android::CameraParameters::KEY_CAMERA_MODE, "1");
+            params.set(android::CameraParameters::KEY_QC_ZSL, "on");
+            params.set(android::CameraParameters::KEY_QC_CAMERA_MODE, "1");
         }
-    }
-
-    if (isVideo && id == 1) {
-        /* Front camera only supports infinity */
-        params.set(android::CameraParameters::KEY_FOCUS_MODE, "infinity");
     }
     params.set(android::CameraParameters::SCENE_MODE_GESTURE, "gesture");
     params.set(android::CameraParameters::SCENE_MODE_FOOD, "food");
