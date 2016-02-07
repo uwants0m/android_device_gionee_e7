@@ -20,7 +20,7 @@
 #include <linux/ioctl.h>
 #include <linux/types.h>
 
-typedef int ion_user_handle_t;
+struct ion_handle;
 
 /**
  * enum ion_heap_types - list of all possible types of heaps
@@ -86,9 +86,14 @@ enum ion_heap_type {
 struct ion_allocation_data {
 	size_t len;
 	size_t align;
+/* HACK: Kernel needs heap_mask, userspace needs heap_id_mask. Damn Google. */
+#ifdef __KERNEL__
+	unsigned int heap_mask;
+#else
 	unsigned int heap_id_mask;
+#endif
 	unsigned int flags;
-	ion_user_handle_t handle;
+	struct ion_handle *handle;
 };
 
 /**
