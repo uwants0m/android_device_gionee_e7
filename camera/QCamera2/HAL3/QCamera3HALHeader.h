@@ -1,4 +1,4 @@
-/* Copyright (c) 2013-2014, The Linux Foundataion. All rights reserved.
+/* Copyright (c) 2013, The Linux Foundataion. All rights reserved.
 *
 * Redistribution and use in source and binary forms, with or without
 * modification, are permitted provided that the following conditions are
@@ -46,7 +46,7 @@ class QCamera3Channel;
     } stream_status_t;
 
     typedef struct {
-        uint32_t out_buf_index;
+        int32_t out_buf_index;
         int32_t jpeg_orientation;
         uint8_t jpeg_quality;
         uint8_t jpeg_thumb_quality;
@@ -58,22 +58,7 @@ class QCamera3Channel;
         char gps_processing_method[GPS_PROCESSING_METHOD_SIZE];
     } jpeg_settings_t;
 
-    typedef struct {
-        int32_t iso_speed;
-        int64_t exposure_time;
-    } metadata_response_t;
+ };//namespace qcamera
 
-    typedef struct {
-        cam_stream_type_t stream_type;
-        cam_format_t stream_format;
-        cam_dimension_t input_stream_dim;
-        cam_stream_buf_plane_info_t input_stream_plane_info;
-        cam_dimension_t output_stream_dim;
-        cam_padding_info_t *padding;
-        QCamera3Channel *src_channel;
-        cam_rect_t output_crop;
-        cam_rotation_t rotation;
-    } reprocess_config_t;
-};//namespace qcamera
 
 #endif

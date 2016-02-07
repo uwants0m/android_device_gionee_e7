@@ -1,4 +1,4 @@
-/* Copyright (c) 2012-2014, The Linux Foundataion. All rights reserved.
+/* Copyright (c) 2012-2013, The Linux Foundataion. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are
@@ -51,33 +51,30 @@ public:
                          void *userData);
     // Owner of memory is transferred from the caller to the caller with this call.
     virtual int32_t addStream(QCameraAllocator& allocator,
-            QCameraHeapMemory *streamInfoBuf, QCameraHeapMemory *miscBuf,
-            uint8_t minStreamBufnum, cam_padding_info_t *paddingInfo,
-            stream_cb_routine stream_cb, void *userdata, bool bDynAllocBuf,
-            bool bDeffAlloc = false, cam_rotation_t online_rotation = ROTATE_0);
-    virtual int32_t linkStream(QCameraChannel *ch, QCameraStream *stream);
+                              QCameraHeapMemory *streamInfoBuf,
+                              uint8_t minStreamBufnum,
+                              cam_padding_info_t *paddingInfo,
+                              stream_cb_routine stream_cb,
+                              void *userdata);
     virtual int32_t start();
     virtual int32_t stop();
     virtual int32_t bufDone(mm_camera_super_buf_t *recvd_frame);
     virtual int32_t processZoomDone(preview_stream_ops_t *previewWindow,
                                     cam_crop_data_t &crop_info);
-    int32_t config();
     QCameraStream *getStreamByHandle(uint32_t streamHandle);
     uint32_t getMyHandle() const {return m_handle;};
-    uint32_t getNumOfStreams() const {return mStreams.size();};
-    QCameraStream *getStreamByIndex(uint32_t index);
+    uint8_t getNumOfStreams() const {return m_numStreams;};
+    QCameraStream *getStreamByIndex(uint8_t index);
     QCameraStream *getStreamByServerID(uint32_t serverID);
-    int32_t UpdateStreamBasedParameters(QCameraParameters &param);
-    void deleteChannel();
 
 protected:
     uint32_t m_camHandle;
     mm_camera_ops_t *m_camOps;
     bool m_bIsActive;
-    bool m_bAllowDynBufAlloc; // if buf allocation can be in two steps
 
     uint32_t m_handle;
-    Vector<QCameraStream *> mStreams;
+    uint8_t m_numStreams;
+    QCameraStream *mStreams[MAX_STREAM_NUM_IN_BUNDLE];
     mm_camera_buf_notify_t mDataCB;
     void *mUserData;
 };
@@ -90,11 +87,8 @@ public:
                       mm_camera_ops_t *cam_ops);
     QCameraPicChannel();
     virtual ~QCameraPicChannel();
-    int32_t takePicture(uint8_t num_of_snapshot, uint8_t num_of_retro_snapshot);
+    int32_t takePicture(uint8_t num_of_snapshot);
     int32_t cancelPicture();
-    int32_t stopAdvancedCapture(mm_camera_advanced_capture_t type);
-    int32_t startAdvancedCapture(mm_camera_advanced_capture_t type);
-    int32_t flushSuperbuffer(uint32_t frame_idx);
 };
 
 // video channel class
@@ -120,38 +114,17 @@ public:
                                        cam_pp_feature_config_t &config,
                                        QCameraChannel *pSrcChannel,
                                        uint8_t minStreamBufNum,
-                                       uint8_t burstNum,
-                                       cam_padding_info_t *paddingInfo,
-                                       QCameraParameters &param,
-                                       bool contStream,
-                                       bool offline);
+                                       cam_padding_info_t *paddingInfo);
     // online reprocess
-    int32_t doReprocess(mm_camera_super_buf_t *frame,
-            QCameraParameters &param, QCameraStream *pMetaStream,
-            uint8_t meta_buf_index, int32_t rotation);
-
+    int32_t doReprocess(mm_camera_super_buf_t *frame);
     // offline reprocess
-    int32_t doReprocess(int buf_fd, size_t buf_length, int32_t &ret_val);
-
-    int32_t doReprocessOffline(mm_camera_super_buf_t *frame, QCameraParameters &param,
-             mm_camera_buf_def_t *meta_buf, int32_t rotation);
-
-    int32_t stop();
-    QCameraChannel *getSrcChannel(){return m_pSrcChannel;};
+    int32_t doReprocess(int buf_fd, uint32_t buf_length, int32_t &ret_val);
 
 private:
     QCameraStream *getStreamBySrouceHandle(uint32_t srcHandle);
 
-    typedef struct {
-        QCameraStream *stream;
-        cam_mapping_buf_type type;
-        uint32_t index;
-    } OfflineBuffer;
-
     uint32_t mSrcStreamHandles[MAX_STREAM_NUM_IN_BUNDLE];
     QCameraChannel *m_pSrcChannel; // ptr to source channel for reprocess
-    android::List<OfflineBuffer> mOfflineBuffers;
-
 };
 
 }; // namespace qcamera

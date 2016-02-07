@@ -29,8 +29,6 @@
 
 #include <utils/Errors.h>
 #include <utils/Log.h>
-#include <string.h>
-#include <malloc.h>
 #include "QCameraQueue.h"
 
 namespace qcamera {
@@ -206,39 +204,6 @@ bool QCameraQueue::enqueueWithPriority(void *data)
 }
 
 /*===========================================================================
- * FUNCTION   : peek
- *
- * DESCRIPTION: return the head element without removing it
- *
- * PARAMETERS : None
- *
- * RETURN     : data ptr. NULL if not any data in the queue.
- *==========================================================================*/
-void* QCameraQueue::peek()
-{
-    camera_q_node* node = NULL;
-    void* data = NULL;
-    struct cam_list *head = NULL;
-    struct cam_list *pos = NULL;
-
-    pthread_mutex_lock(&m_lock);
-    if (m_active) {
-        head = &m_head.list;
-        pos = head->next;
-        if (pos != head) {
-            node = member_of(pos, camera_q_node, list);
-        }
-    }
-    pthread_mutex_unlock(&m_lock);
-
-    if (NULL != node) {
-        data = node->data;
-    }
-
-    return data;
-}
-
-/*===========================================================================
  * FUNCTION   : dequeue
  *
  * DESCRIPTION: dequeue data from the queue
@@ -350,51 +315,6 @@ void QCameraQueue::flushNodes(match_fn match){
             node = member_of(pos, camera_q_node, list);
             pos = pos->next;
             if ( match(node->data, m_userData) ) {
-                cam_list_del_node(&node->list);
-                m_size--;
-
-                if (NULL != node->data) {
-                    if (m_dataFn) {
-                        m_dataFn(node->data, m_userData);
-                    }
-                    free(node->data);
-                }
-                free(node);
-            }
-        }
-    }
-    pthread_mutex_unlock(&m_lock);
-}
-
-/*===========================================================================
- * FUNCTION   : flushNodes
- *
- * DESCRIPTION: flush only specific nodes, depending on
- *              the given matching function.
- *
- * PARAMETERS :
- *   @match   : matching function
- *
- * RETURN     : None
- *==========================================================================*/
-void QCameraQueue::flushNodes(match_fn_data match, void *match_data){
-    camera_q_node* node = NULL;
-    struct cam_list *head = NULL;
-    struct cam_list *pos = NULL;
-
-    if ( NULL == match ) {
-        return;
-    }
-
-    pthread_mutex_lock(&m_lock);
-    if (m_active) {
-        head = &m_head.list;
-        pos = head->next;
-
-        while(pos != head) {
-            node = member_of(pos, camera_q_node, list);
-            pos = pos->next;
-            if ( match(node->data, m_userData, match_data) ) {
                 cam_list_del_node(&node->list);
                 m_size--;
 

@@ -1,4 +1,4 @@
-/* Copyright (c) 2014, The Linux Foundation. All rights reserved.
+/* Copyright (c) 2014, The Linux Foundataion. All rights reserved.
 *
 * Redistribution and use in source and binary forms, with or without
 * modification, are permitted provided that the following conditions are
@@ -34,26 +34,18 @@ namespace qcamera {
 
 enum qcamera3_ext_section {
     QCAMERA3_PRIVATEDATA = VENDOR_SECTION,
-    QCAMERA3_CDS,
     QCAMERA3_OPAQUE_RAW,
-    QCAMERA3_CROP,
-    QCAMERA3_TUNING_META_DATA,
     QCAMERA3_SECTIONS_END
 };
 
 enum qcamera3_ext_section_ranges {
     QCAMERA3_PRIVATEDATA_START = QCAMERA3_PRIVATEDATA << 16,
-    QCAMERA3_CDS_START = QCAMERA3_CDS << 16,
     QCAMERA3_OPAQUE_RAW_START = QCAMERA3_OPAQUE_RAW << 16,
-    QCAMERA3_CROP_START = QCAMERA3_CROP << 16,
-    QCAMERA3_TUNING_META_DATA_START = QCAMERA3_TUNING_META_DATA << 16,
 };
 
 enum qcamera3_ext_tags {
     QCAMERA3_PRIVATEDATA_REPROCESS = QCAMERA3_PRIVATEDATA_START,
     QCAMERA3_PRIVATEDATA_END,
-    QCAMERA3_CDS_MODE = QCAMERA3_CDS_START,
-    QCAMERA3_CDS_END,
 
     //Property Name:  org.codeaurora.qcamera3.opaque_raw.opaque_raw_strides
     //
@@ -92,13 +84,13 @@ enum qcamera3_ext_tags {
     //            5 pixels occupy 8 bytes, 4 bits padding at MSB
     //            min_stride = (raw_width+4)/5 * 8
     //    MIPI8:  P0(7:0)
-    //            1 pixel occupy 1 byte
+    //            1 pixel occupy 1 byte, no padding needed
     //            min_stride = raw_width
     //   MIPI10:  P3(1:0) P2(1:0) P1(1:0) P0(1:0) P3(9:2) P2(9:2) P1(9:2) P0(9:2)
-    //            4 pixels occupy 5 bytes
+    //            4 pixels occupy 5 bytes, no padding needed
     //            min_stride = (raw_width+3)/4 * 5
     //   MIPI12:  P1(3:0) P0(3:0) P1(11:4) P0(11:4)
-    //            2 pixels occupy 3 bytes
+    //            2 pixels occupy 3 bytes, no padding needed
     //            min_stride = (raw_width+1)/2 * 3
     //Note that opaque_raw_stride needs to be at least the required minimum
     //stride from the table above. ISP hardware may need more generous stride
@@ -106,14 +98,6 @@ enum qcamera3_ext_tags {
     //CEILING16(raw_width) due to bus burst length requirement.
     QCAMERA3_OPAQUE_RAW_FORMAT,
     QCAMERA3_OPAQUE_RAW_END,
-
-    QCAMERA3_CROP_COUNT_REPROCESS = QCAMERA3_CROP_START,
-    QCAMERA3_CROP_REPROCESS,
-    QCAMERA3_CROP_STREAM_ID_REPROCESS,
-    QCAMERA3_CROP_END,
-
-    QCAMERA3_TUNING_META_DATA_BLOB = QCAMERA3_TUNING_META_DATA_START,
-    QCAMERA3_TUNING_META_DATA_END
 };
 
 // QCAMERA3_OPAQUE_RAW_FORMAT

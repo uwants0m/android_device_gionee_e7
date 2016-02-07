@@ -1,4 +1,4 @@
-/* Copyright (c) 2012-2014, The Linux Foundataion. All rights reserved.
+/* Copyright (c) 2012-2013, The Linux Foundataion. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are
@@ -43,7 +43,7 @@ namespace qcamera {
 class QCamera3Stream;
 class QCamera3Channel;
 
-typedef void (*hal3_stream_cb_routine)(mm_camera_super_buf_t *frame,
+typedef void (*stream_cb_routine)(mm_camera_super_buf_t *frame,
                                   QCamera3Stream *stream,
                                   void *userdata);
 
@@ -61,11 +61,9 @@ public:
                          cam_dimension_t streamDim,
                          cam_stream_reproc_config_t* reprocess_config,
                          uint8_t minStreamBufNum,
-                         uint32_t postprocess_mask,
-                         cam_is_type_t is_type,
-                         hal3_stream_cb_routine stream_cb,
+                         stream_cb_routine stream_cb,
                          void *userdata);
-    virtual int32_t bufDone(uint32_t index);
+    virtual int32_t bufDone(int index);
     virtual int32_t processDataNotify(mm_camera_super_buf_t *bufs);
     virtual int32_t start();
     virtual int32_t stop();
@@ -77,12 +75,12 @@ public:
     int32_t getFrameOffset(cam_frame_len_offset_t &offset);
     int32_t getFrameDimension(cam_dimension_t &dim);
     int32_t getFormat(cam_format_t &fmt);
-    mm_camera_buf_def_t* getInternalFormatBuffer(uint32_t index);
+    mm_camera_buf_def_t* getInternalFormatBuffer(int index);
     QCamera3Memory *getStreamBufs() {return mStreamBufs;};
     uint32_t getMyServerID();
 
     int32_t mapBuf(uint8_t buf_type, uint32_t buf_idx,
-            int32_t plane_idx, int fd, size_t size);
+                   int32_t plane_idx, int fd, uint32_t size);
     int32_t unmapBuf(uint8_t buf_type, uint32_t buf_idx, int32_t plane_idx);
     int32_t setParameter(cam_stream_parm_buffer_t &param);
 
@@ -97,7 +95,7 @@ private:
     mm_camera_stream_mem_vtbl_t mMemVtbl;
     mm_camera_map_unmap_ops_tbl_t *mMemOps;
     uint8_t mNumBufs;
-    hal3_stream_cb_routine mDataCB;
+    stream_cb_routine mDataCB;
     void *mUserData;
 
     QCameraQueue     mDataQ;
@@ -120,8 +118,8 @@ private:
     static int32_t put_bufs(
                      mm_camera_map_unmap_ops_tbl_t *ops_tbl,
                      void *user_data);
-    static int32_t invalidate_buf(uint32_t index, void *user_data);
-    static int32_t clean_invalidate_buf(uint32_t index, void *user_data);
+    static int32_t invalidate_buf(int index, void *user_data);
+    static int32_t clean_invalidate_buf(int index, void *user_data);
 
     int32_t getBufs(cam_frame_len_offset_t *offset,
                      uint8_t *num_bufs,
@@ -129,8 +127,8 @@ private:
                      mm_camera_buf_def_t **bufs,
                      mm_camera_map_unmap_ops_tbl_t *ops_tbl);
     int32_t putBufs(mm_camera_map_unmap_ops_tbl_t *ops_tbl);
-    int32_t invalidateBuf(uint32_t index);
-    int32_t cleanInvalidateBuf(uint32_t index);
+    int32_t invalidateBuf(int index);
+    int32_t cleanInvalidateBuf(int index);
 
 };
 

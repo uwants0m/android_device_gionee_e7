@@ -35,7 +35,6 @@
 
 namespace qcamera {
 
-typedef bool (*match_fn_data)(void *data, void *user_data, void *match_data);
 typedef void (*release_data_fn)(void* data, void *user_data);
 typedef bool (*match_fn)(void *data, void *user_data);
 
@@ -51,11 +50,8 @@ public:
      * Need to call init() in order to use the queue again */
     void flush();
     void flushNodes(match_fn match);
-    void flushNodes(match_fn_data match, void *spec_data);
     void* dequeue(bool bFromHead = true);
-    void* peek();
     bool isEmpty();
-    int getCurrentSize() {return m_size;}
 private:
     typedef struct {
         struct cam_list list;

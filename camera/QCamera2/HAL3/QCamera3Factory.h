@@ -1,4 +1,4 @@
-/* Copyright (c) 2012-2014, The Linux Foundataion. All rights reserved.
+/* Copyright (c) 2012-2013, The Linux Foundataion. All rights reserved.
 *
 * Redistribution and use in source and binary forms, with or without
 * modification, are permitted provided that the following conditions are
@@ -27,25 +27,20 @@
 *
 */
 
-#ifndef __QCAMERA2FACTORY_H__
-#define __QCAMERA2FACTORY_H__
+#ifndef __QCAMERA3FACTORY_H__
+#define __QCAMERA3FACTORY_H__
 
-#include <hardware/camera.h>
-#include <system/camera.h>
 #include <hardware/camera3.h>
+
+#include "QCamera3HWI.h"
 
 namespace qcamera {
 
-typedef struct {
-    uint32_t cameraId;
-    uint32_t device_version;
-} hal_desc;
-
-class QCamera2Factory
+class QCamera3Factory
 {
 public:
-    QCamera2Factory();
-    virtual ~QCamera2Factory();
+    QCamera3Factory();
+    virtual ~QCamera3Factory();
 
     static int get_number_of_cameras();
     static int get_camera_info(int camera_id, struct camera_info *info);
@@ -60,15 +55,12 @@ private:
     int cameraDeviceOpen(int camera_id, struct hw_device_t **hw_device);
     static int camera_device_open(const struct hw_module_t *module, const char *id,
                 struct hw_device_t **hw_device);
-    static int openLegacy(
-            int32_t cameraId, uint32_t halVersion, struct hw_device_t** hw_device);
 
 public:
     static struct hw_module_methods_t mModuleMethods;
 
 private:
     int mNumOfCameras;
-    hal_desc *mHalDescriptors;
     const camera_module_callbacks_t *mCallbacks;
 };
 
@@ -76,4 +68,4 @@ private:
 
 extern camera_module_t HAL_MODULE_INFO_SYM;
 
-#endif /* __QCAMERA2FACTORY_H__ */
+#endif /* ANDROID_HARDWARE_QUALCOMM_CAMERA_H */
