@@ -354,7 +354,9 @@ struct ion_allocation_data {
 #ifdef __KERNEL__
 	unsigned int heap_mask;
 #else
-	unsigned int heap_mask;
+	unsigned int heap_id_mask;
+#else
+        unsigned int heap_mask;
 #endif
 	unsigned int flags;
 	ion_user_handle_t handle;
