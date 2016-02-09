@@ -122,6 +122,11 @@ on boot
     # Allow QMUX daemon to assign port open wait time
     chown radio radio /sys/devices/virtual/hsicctl/hsicctl0/modem_wait
 
+    # Camera Recording
+    mkdir /dev/video
+    symlink /dev/video32 /dev/video/venus_dec
+    symlink /dev/video33 /dev/video/venus_enc
+
     #Set SUID bit for usbhub
     chmod 4755 /system/bin/usbhub
     chmod 755 /system/bin/usbhub_init
@@ -187,7 +192,8 @@ on boot
     chmod 0666 /sys/module/restart/parameters/download_mode
     
     # Gionee wanglei, 2013-10-21, add for torch led
-    chmod 0666 /sys/class/leds/led:flash_torch/brightness
+    chown system camera /sys/class/leds/led:flash_torch/brightness
+    chmod 0660 /sys/class/leds/led:flash_torch/brightness
 
     #Gionee xuna add for autommitest, 20140724
     chmod 0777 /sys/class/leds/button-backlight/brightness
@@ -326,9 +332,6 @@ on post-fs-data
 #Double tap 2 wake
     chown root system sys/devices/platform/tp_wake_switch/double_wake
     chmod 0664 sys/devices/platform/tp_wake_switch/double_wake
-
-# camera sockets
-    mkdir /data/misc/camera 0770 camera camera
     
     setprop qcom.audio.init complete
     
@@ -612,7 +615,7 @@ service dhcpcd_bnep0 /system/bin/dhcpcd -BKLG
 service qcamerasvr /system/bin/mm-qcamera-daemon
     class late_start
     user camera
-    group camera system inet input graphics
+    group camera system inet input
     
 service gpsone_daemon /system/bin/gpsone_daemon
     class late_start
