@@ -35,7 +35,7 @@ LOCAL_C_INCLUDES += \
         hardware/qcom/display-caf-bfam/libgralloc
 
 LOCAL_SHARED_LIBRARIES := libcamera_client liblog libhardware libutils libcutils libdl
-LOCAL_SHARED_LIBRARIES += libmmcamera_interface libmmjpeg_interface
+LOCAL_SHARED_LIBRARIES += libmmcamera_interface libmmjpeg_interface libgn_camera_feature
 
 LOCAL_MODULE_PATH := $(TARGET_OUT_SHARED_LIBRARIES)/hw
 LOCAL_MODULE := camera.$(TARGET_BOARD_PLATFORM)
