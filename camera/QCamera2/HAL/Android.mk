@@ -29,14 +29,13 @@ LOCAL_C_INCLUDES := \
         system/media/camera/include \
         $(LOCAL_PATH)/../../mm-image-codec/qexif \
         $(LOCAL_PATH)/../../mm-image-codec/qomx_core \
-        $(LOCAL_PATH)/../util \
-        vendor/gm/e7/proprietary/lib
+        $(LOCAL_PATH)/../util
 
 LOCAL_C_INCLUDES += \
         hardware/qcom/display-caf-bfam/libgralloc
 
 LOCAL_SHARED_LIBRARIES := libcamera_client liblog libhardware libutils libcutils libdl
-LOCAL_SHARED_LIBRARIES += libmmcamera_interface libmmjpeg_interface libgn_camera_feature
+LOCAL_SHARED_LIBRARIES += libmmcamera_interface libmmjpeg_interface
 
 LOCAL_MODULE_PATH := $(TARGET_OUT_SHARED_LIBRARIES)/hw
 LOCAL_MODULE := camera.$(TARGET_BOARD_PLATFORM)
