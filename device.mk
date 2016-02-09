@@ -172,7 +172,7 @@ PRODUCT_PACKAGES += \
     libqomx_core \
     libmmcamera_interface \
     libmmjpeg_interface \
-    camera.msm8974 \
+    camera.e7 \
     mm-jpeg-interface-test \
     mm-qcamera-app
 
