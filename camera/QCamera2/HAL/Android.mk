@@ -29,7 +29,8 @@ LOCAL_C_INCLUDES := \
         system/media/camera/include \
         $(LOCAL_PATH)/../../mm-image-codec/qexif \
         $(LOCAL_PATH)/../../mm-image-codec/qomx_core \
-        $(LOCAL_PATH)/../util
+        $(LOCAL_PATH)/../util \
+        vendor/gm/e7/proprietary/lib
 
 LOCAL_C_INCLUDES += \
         hardware/qcom/display-caf-bfam/libgralloc
