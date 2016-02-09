@@ -145,6 +145,8 @@
 /dev/tty_sdio_00          0660   system     system
 /dev/ttyGS0               0660   system     system
 /dev/i2c-5                0660   media       media
+/dev/video32              0660   system     camera
+/dev/video33              0660   system     camera
 
 # DVB devices
 /dev/dvb/adapter0/demux*  0440   media       media
