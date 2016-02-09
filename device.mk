@@ -271,10 +271,7 @@ PRODUCT_PROPERTY_OVERRIDES += \
 # qcom
 PRODUCT_PROPERTY_OVERRIDES += \
     ro.qc.sdk.audio.ssr=false \
-    ro.qc.sdk.sensors.gestures=true \
-    ro.qc.sdk.camera.facialproc=false \
-    ro.qc.sdk.gestures.camera=false \
-    camera2.portability.force_api=1
+    ro.qc.sdk.sensors.gestures=true
 
 # Audio Configuration
 PRODUCT_PROPERTY_OVERRIDES += \
