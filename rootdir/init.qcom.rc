@@ -37,9 +37,13 @@ on init
     # Preload the BoringSSL wrapper
     export LD_PRELOAD /system/lib/libboringssl-compat.so
 
+    chmod 0701 /mnt/media_rw
+    mkdir /mnt/media_rw/usbdisk 0700 media_rw media_rw
+
     # Set permissions for persist partition
     mkdir /persist 0771 system system
-
+    mkdir /firmware 0771 system system
+    
     # Support legacy paths
     symlink /sdcard /mnt/sdcard
     symlink /sdcard /storage/sdcard0
@@ -49,9 +53,6 @@ on init
 
 on fs
     mount_all ./fstab.qcom
-
-    setprop ro.crypto.fuse_sdcard true
-
     restorecon_recursive /persist
     
 on early-boot
@@ -301,6 +302,14 @@ on post-fs-data
     setprop vold.post_fs_data_done 1
 
 on charger
+    # Booting modem
+    wait /dev/block/platform/msm_sdcc.1/by-name/modem
+    mount vfat /dev/block/platform/msm_sdcc.1/by-name/modem /firmware ro shortname=lower,uid=1000,gid=1000,dmask=227,fmask=337,context=u:object_r:firmware_file:s0
+    wait /dev/block/platform/msm_sdcc.1/by-name/system
+    mount ext4 /dev/block/platform/msm_sdcc.1/by-name/system /system ro barrier=1
+    start rmt_storage
+    start irsc_util
+    
     # Enable Power modes and set the CPU Freq Sampling rates
     write /sys/module/lpm_levels/enable_low_power/l2 4
     write /sys/module/msm_pm/modes/cpu0/power_collapse/suspend_enabled 1
@@ -352,9 +361,7 @@ service irsc_util /system/bin/logwrapper /system/bin/irsc_util "/etc/sec_config"
 service rmt_storage /system/bin/rmt_storage
     class core
     user root
-
-on property:ro.boot.emmc=true
-    start rmt_storage
+    group system
     
 service config_bluetooth /system/bin/sh /system/etc/init.qcom.bt.sh "onboot"
     class core
@@ -563,7 +570,11 @@ service qcamerasvr /system/bin/mm-qcamera-daemon
     class late_start
     user camera
     group camera system inet input graphics
-    
+
+service fuse_usbdisk /system/bin/sdcard -u 1023 -g 1023 /mnt/media_rw/usbdisk /storage/usbdisk
+    class late_start
+    disabled
+
 service gpsone_daemon /system/bin/gpsone_daemon
     class late_start
     user gps
