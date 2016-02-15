@@ -122,9 +122,9 @@ BOARD_CHARGER_DISABLE_INIT_BLANK := true
 HEALTHD_FORCE_BACKLIGHT_CONTROL := true
 HEALTHD_BACKLIGHT_ON_LEVEL := 125
 HEALTHD_ENABLE_TRICOLOR_LED := true
-RED_LED_PATH := /sys/class/leds/led:red/brightness
-GREEN_LED_PATH := /sys/class/leds/led:green/brightness
-BLUE_LED_PATH := /sys/class/leds/led:blue/brightness
+RED_LED_PATH := /sys/devices/leds-qpnp-f6517400/leds/red/brightness
+GREEN_LED_PATH := /sys/devices/leds-qpnp-f6517400/leds/green/brightness
+BLUE_LED_PATH := /sys/devices/leds-qpnp-f6517400/leds/blue/brightness
 
 # power hal
 TARGET_PROVIDES_POWERHAL := true
