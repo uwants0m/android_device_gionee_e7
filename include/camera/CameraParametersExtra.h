@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015 The CyanogenMod Project
+ * * Copyright (C) 2015 The CyanogenMod Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,25 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
+ 
 #define CAMERA_PARAMETERS_EXTRA_C \
 const char CameraParameters::SCENE_MODE_GESTURE[] = "gesture"; \
 const char CameraParameters::SCENE_MODE_FOOD[] = "food"; \
-const char CameraParameters::KEY_CAPTURE_MODE[] = "cap-mode"; \
-const char CameraParameters::KEY_QC_SUPPORTED_DENOISE[] = "denoise-values"; \
-const char CameraParameters::CAPTURE_MODE_HDR[] = "hdr"; \
-const char CameraParameters::CAPTURE_MODE_NORMAL[] = "normal"; \
-const char CameraParameters::KEY_QC_ZSL[] = "zsl"; \
-const char CameraParameters::KEY_QC_CAMERA_MODE[] = "camera-mode"; \
 int CameraParameters::getStr(const char *key) const { return -1; };
-
+ 
 #define CAMERA_PARAMETERS_EXTRA_H \
     static const char SCENE_MODE_GESTURE[]; \
     static const char SCENE_MODE_FOOD[]; \
-    static const char KEY_CAPTURE_MODE[]; \
-    static const char KEY_QC_SUPPORTED_DENOISE[]; \
-    static const char CAPTURE_MODE_HDR[]; \
-    static const char CAPTURE_MODE_NORMAL[]; \
-    static const char KEY_QC_ZSL[]; \
-    static const char KEY_QC_CAMERA_MODE[]; \
     int getStr(const char *key) const;
